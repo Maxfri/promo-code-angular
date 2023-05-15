@@ -1,0 +1,37 @@
+<form [formGroup]="form" (ngSubmit)="submit()" class="create-form-wrapper">
+
+ 
+  <!-- <mat-form-field class="full-width">
+    <mat-label>Promo-code name</mat-label>
+    <input type="text" matInput placeholder="Promo-code name" formControlName="title">
+    <mat-error *ngIf="form.title.hasError('email') && !emailFormControl.hasError('required')">
+      Please enter a valid email address
+    </mat-error>
+    <mat-error *ngIf="emailFormControl.hasError('required')">
+      Email is <strong>required</strong>
+    </mat-error>
+  </mat-form-field> -->
+
+  <mat-form-field class="full-width">
+    <mat-label>Promo-code name</mat-label>
+    <input type="text" matInput placeholder="Promo-code name" formControlName="title">
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label>Promocode</mat-label>
+    <input matInput placeholder="Promocode" formControlName="promocode" />
+  </mat-form-field>
+
+ 
+  <mat-form-field class="full-width">
+    <mat-label>Description</mat-label>
+    <input matInput placeholder="Description" formControlName="description">
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label>Date of expiry</mat-label>
+    <input matInput type="date" formControlName="dateOfExpiry">
+  </mat-form-field>
+
+  <button type="submit">Create</button>
+</form>

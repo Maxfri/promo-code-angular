@@ -1,27 +1,43 @@
-# PromoCodeAngular
+Необходимо разработать приложение для хранения промокодов 
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.0.1.
+Должны быть следующие страницы: список промокодов, страница создания/редактирования промокода. 
 
-## Development server
+Использовать нужно реактивные формы. Для хранения данных использовать mobx или ngrx на выбор. Сделать иммитацию работы с api через сервисы, методы должны возвращать Observable, добавить задержку. UI компоненты использовать эти https://material.angular.io/. Для работы с датами можно использовать momentjs. 
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+ 
 
-## Code scaffolding
+Требования к странице создания/редактирования промокода: 
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Uuid – скрытое поле, уникальный идентификатор промокода (https://www.npmjs.com/package/uuid), должен генерироваться в сервисе, иммитирующем работу с api при создании. 
 
-## Build
+Название - обязательное поле, минимум 3 символа, максимум 30. Запретить ввод любых символов кроме букв и цифр, можно использовать https://www.npmjs.com/package/ngx-mask. Название должно быть уникальным(async validators). 
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Промокод - обязательное поле, минимум 1 символ, максимум 10, может содержать буквы(русские, английские), цифры и пробелы(не может быть 2 пробела подряд, пробелы в начале и конце должны обрезаться при сохранении) 
 
-## Running unit tests
+Описание – необязательное поле, минимум 3 символа, максимум 255. 
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Дата окончания действия промокода – не может быть больше текущей даты(валидация + задизейблить такие даты в datepicker’e) 
 
-## Running end-to-end tests
+При нажатии на кнопку сохранения, в случае если форма не валидна, невалидные поля должны подсветиться красным, очень желательно для каждой валидации писать осознанное сообщение(внизу под полем) 
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Требования к списку промокодов: 
 
-## Further help
+На странице должен быть поиск, если ничего не нашлось должно быть соответствующее сообщение. Поиск должен происходить по вхождению в названии или описании 
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Кнопка создания промокода 
+
+Если промокодов нет об этом должно отображаться соответствующее сообщение 
+
+Промокоды должны подгружаться при скролле(https://www.npmjs.com/package/ngx-infinite-scroll) по 8 штук. 
+
+Должен быть фильтр(выпадающий список) – все, активные, истекшие. Истекшими считаются те, у которых дата больше чем дата окончания действия промокода 
+
+Название промокода должно отображаться в верхнем регистре(использовать pipe) 
+
+У карточки промокода должны быть кнопки редактирования и удаления 
+
+При нажатии на кнопку удаления должно появляться окно подтверждения 
+
+Истекшие должны подсвечиваться каким-либо образом 
+
+При наведении курсора мыши на карточку промокода, карточка должна подсвечиваться, при этом это должно быть реализовано через директиву 

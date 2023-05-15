@@ -1,26 +1,37 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
+
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PromocodesPageComponent } from './pages/promocodes-page/promocodes-page.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CreatePromocodePageComponent } from './pages/create-promocode-page/create-promocode-page.component';
-import { NavigateComponent } from './components/navigate/navigate.component';
+import { NavigationComponent } from './components/navigation/navigation.component';
+import { PromoCodeCardComponent } from './components/promo-code-card/promo-code-card.component';
+import { CreatePromocodeComponent } from './components/create-promocode/create-promocode.component';
+import { MaterialModule } from '../material.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     PromocodesPageComponent,
     CreatePromocodePageComponent,
-    NavigateComponent
+    NavigationComponent,
+    PromoCodeCardComponent,
+    CreatePromocodeComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    MaterialModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
