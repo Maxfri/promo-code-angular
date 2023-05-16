@@ -5,6 +5,6 @@ import { Component } from '@angular/core';
   templateUrl: './create-promocode-page.component.html',
   styleUrls: ['./create-promocode-page.component.scss']
 })
-export class CreatePromocodePageComponent {
+export class CreatePromoCodePageComponent {
 
 }

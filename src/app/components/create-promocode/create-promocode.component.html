@@ -1,41 +1,49 @@
 <form [formGroup]="form" (ngSubmit)="submit()" class="create-form-wrapper">
-
- 
   <mat-form-field class="full-width">
-    <mat-label>Promo-code name</mat-label>
-    <input type="text" matInput placeholder="Promo-code name" formControlName="title">
-    <mat-error *ngIf="title.hasError('title') && !title.hasError('required')">
-      Please enter a valid email address
-    </mat-error>
+    <mat-label>Promo-code title</mat-label>
+    <input
+      type="text"
+      matInput
+      placeholder="Promo-code name"
+      formControlName="title"
+    />
     <mat-error *ngIf="title.hasError('required')">
       Title is <strong>required</strong>
     </mat-error>
   </mat-form-field>
 
   <mat-form-field class="full-width">
-    <mat-label>Promo-code name</mat-label>
-    <input type="text" matInput placeholder="Promo-code name" formControlName="title">
-  </mat-form-field>
-
-  <mat-form-field class="full-width">
     <mat-label>Promocode</mat-label>
-    <input matInput placeholder="Promocode" formControlName="promocode" />
+    <input
+      type="text"
+      matInput
+      placeholder="promocode"
+      formControlName="promocode"
+    />
+    <mat-error *ngIf="promocode.hasError('required')">
+      Promocode is <strong>required</strong>
+    </mat-error>
   </mat-form-field>
 
- 
   <mat-form-field class="full-width">
     <mat-label>Description</mat-label>
-    <input matInput placeholder="Description" formControlName="description">
+    <input matInput placeholder="Description" formControlName="description" />
   </mat-form-field>
-
 
   <mat-form-field appearance="fill" class="full-width">
     <mat-label>Choose a date of expire</mat-label>
-    <input matInput [matDatepicker]="picker" formControlName="dateOfExpiry">
+    <input matInput [matDatepicker]="picker" formControlName="dateOfExpiry" />
     <mat-hint>DD/MM/YYYY</mat-hint>
     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
 
-  <button type="submit">Create</button>
+  <button
+    mat-raised-button
+    color="primary"
+    type="submit"
+    [disabled]="form.invalid"
+  >
+    Create
+  </button>
 </form>

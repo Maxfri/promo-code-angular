@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { PromocodeService } from 'src/app/services/promocode.service';
+import { PromoCodeService } from 'src/app/services/promo-code.service';
 import { v4 as uuidv4 } from 'uuid';
 
 @Component({
@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
   templateUrl: './create-promocode.component.html',
   styleUrls: ['./create-promocode.component.scss'],
 })
-export class CreatePromocodeComponent {
+export class CreatePromoCodeComponent {
   form = new FormGroup({
     title: new FormControl<string>('', [
       Validators.required,
@@ -27,7 +27,9 @@ export class CreatePromocodeComponent {
     dateOfExpiry: new FormControl<Date>(new Date()),
   });
 
-  constructor(private promocodeService: PromocodeService) { }
+  constructor(private promoCodeService: PromoCodeService) {
+  }
+
 
   get title() {
     return this.form.controls.title as FormControl;
@@ -46,12 +48,12 @@ export class CreatePromocodeComponent {
   }
 
   submit() {
-    this.promocodeService.create({
+    this.promoCodeService.addPromoCode({
       id: uuidv4(),
       title: this.form.value.title as string,
-      description: 'lorem ipsum set',
-      promocode: uuidv4(),
-      dateOfExpiry: new Date(),
+      description: this.form.value.description as string,
+      promocode: this.form.value.promocode as string,
+      dateOfExpiry: this.form.value.dateOfExpiry as Date,
     });
   }
 }
