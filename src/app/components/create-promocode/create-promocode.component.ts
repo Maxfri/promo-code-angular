@@ -27,10 +27,22 @@ export class CreatePromocodeComponent {
     dateOfExpiry: new FormControl<Date>(new Date()),
   });
 
-  constructor(private promocodeService: PromocodeService) {}
+  constructor(private promocodeService: PromocodeService) { }
 
   get title() {
     return this.form.controls.title as FormControl;
+  }
+
+  get promocode() {
+    return this.form.controls.promocode as FormControl;
+  }
+
+  get description() {
+    return this.form.controls.description as FormControl;
+  }
+
+  get dateOfExpiry() {
+    return this.form.controls.dateOfExpiry as FormControl;
   }
 
   submit() {
