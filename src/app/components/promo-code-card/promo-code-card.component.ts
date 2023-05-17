@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { IPromoCode } from 'src/app/models/promo-code';
+import { PromoCodeService } from 'src/app/services/promo-code.service';
 
 @Component({
   selector: 'app-promo-code-card',
@@ -9,7 +10,7 @@ import { IPromoCode } from 'src/app/models/promo-code';
 export class PromoCodeCardComponent {
   @Input() item: IPromoCode;
 
-  constructor() {
-    console.log(this.item)
+  constructor(public promoCodeService: PromoCodeService) {
   }
+
 }

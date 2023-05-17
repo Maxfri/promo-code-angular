@@ -13,6 +13,7 @@ import { NavigationComponent } from './components/navigation/navigation.componen
 import { PromoCodeCardComponent } from './components/promo-code-card/promo-code-card.component';
 import { CreatePromoCodeComponent } from './components/create-promocode/create-promocode.component';
 import { MaterialModule } from '../material.module';
+import { FilterPromoCodePipe } from './pipes/filter-promo-code.pipe';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { MaterialModule } from '../material.module';
     NavigationComponent,
     PromoCodeCardComponent,
     CreatePromoCodePageComponent,
+    FilterPromoCodePipe,
   ],
   imports: [
     BrowserModule,

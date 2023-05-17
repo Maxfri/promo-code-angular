@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { mockData } from 'src/app/data/promo-codes';
+import { Observable } from 'rxjs';
 import { IPromoCode } from 'src/app/models/promo-code';
 import { PromoCodeService } from 'src/app/services/promo-code.service';
 
@@ -10,11 +10,11 @@ import { PromoCodeService } from 'src/app/services/promo-code.service';
 })
 export class PromoCodesPageComponent implements OnInit {
   loading = false;
-  items: IPromoCode[];
+  promoCodes$: Observable<IPromoCode[]>;
 
   constructor(public promoCodeService: PromoCodeService) { }
 
   ngOnInit() {
-    this.items = [...mockData, ...this.promoCodeService.getPromoCodes()];
+    this.promoCodes$ = this.promoCodeService.getPromoCodes();
   }
 }

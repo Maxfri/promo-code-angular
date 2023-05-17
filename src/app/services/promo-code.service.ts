@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { IPromoCode } from '../models/promo-code';
-import { observable, action } from 'mobx-angular';
-import { Observable, catchError, delay, retry, throwError, tap } from 'rxjs';
+import { action } from 'mobx-angular';
 import { PromoCodeStore } from '../store/store';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -13,11 +13,11 @@ export class PromoCodeService {
     this.promoCodeStore.addPromoCode(promoCode);
   }
 
-  @action removePromoCode(promoCode: IPromoCode) {
-    this.promoCodeStore.removePromoCode(promoCode);
+  @action removePromoCode(promoCodeId: string) {
+    this.promoCodeStore.removePromoCode(promoCodeId);
   }
 
-  getPromoCodes(): IPromoCode[] {
-    return this.promoCodeStore.promoCodes;
+  getPromoCodes(): Observable<IPromoCode[]> {
+    return this.promoCodeStore.getPromoCodesObservable();
   }
 }
