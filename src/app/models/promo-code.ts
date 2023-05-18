@@ -1,7 +1,7 @@
 export interface IPromoCode {
   id: string;
   title: string;
-  promocode: string;
+  promoCode: string;
   description?: string;
-  dateOfExpiry: Date | string;
+  dateOfExpiry: Date;
 }

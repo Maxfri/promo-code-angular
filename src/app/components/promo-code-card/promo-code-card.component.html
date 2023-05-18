@@ -1,16 +1,27 @@
 <mat-card>
   <mat-card-header>
     <mat-card-title-group>
-      <mat-card-title>{{ item.title }}</mat-card-title>
-      <mat-card-subtitle>{{ item.description }}</mat-card-subtitle>
+      <mat-card-title>Title: {{ item.title }}</mat-card-title>
+      <mat-card-subtitle *ngIf="item.description"
+        >Description: {{ item.description }}</mat-card-subtitle
+      >
     </mat-card-title-group>
   </mat-card-header>
   <mat-card-content>
-    {{ item.promocode | uppercase }}
+    <span>{{ item.promoCode | uppercase }}</span>
     <mat-divider></mat-divider>
+    <span>
+      Expiration date:{{ formatDate(item.dateOfExpiry) | uppercase }}</span
+    >
   </mat-card-content>
   <mat-card-actions class="item-actions">
-    <button mat-flat-button color="primary">Edit</button>
+    <button
+      mat-flat-button
+      color="primary"
+      (click)="editPromoCode(item.id)"
+    >
+      Edit
+    </button>
     <button
       mat-mini-fab
       color="warn"

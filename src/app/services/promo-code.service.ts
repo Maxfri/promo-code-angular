@@ -13,11 +13,19 @@ export class PromoCodeService {
     this.promoCodeStore.addPromoCode(promoCode);
   }
 
+  @action editPromoCode(promoCode: IPromoCode) {
+    this.promoCodeStore.editPromoCode(promoCode);
+  }
+
   @action removePromoCode(promoCodeId: string) {
     this.promoCodeStore.removePromoCode(promoCodeId);
   }
 
-  getPromoCodes(): Observable<IPromoCode[]> {
-    return this.promoCodeStore.getPromoCodesObservable();
+  getAllPromoCodes(): Observable<IPromoCode[]> {
+    return this.promoCodeStore.getAllPromoCodesObservable();
+  }
+
+  getPromoCodeById(promoCodeId: string): Observable<IPromoCode | undefined> {
+    return this.promoCodeStore.getPromoCodeById(promoCodeId)
   }
 }

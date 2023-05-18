@@ -4,8 +4,10 @@ import { PromoCodesPageComponent } from './pages/promocodes-page/promo-codes-pag
 import { CreatePromoCodePageComponent } from './pages/create-promocode-page/create-promocode-page.component';
 
 const routes: Routes = [
-  { path: '', component: PromoCodesPageComponent },
-  { path: 'create', component: CreatePromoCodePageComponent },
+  { path: '', redirectTo: '/promo-codes', pathMatch: 'full' },
+  { path: 'promo-codes', component: PromoCodesPageComponent },
+  { path: 'promo-codes/new', component: CreatePromoCodePageComponent },
+  { path: 'promo-codes/:id', component: CreatePromoCodePageComponent }
 ];
 
 @NgModule({

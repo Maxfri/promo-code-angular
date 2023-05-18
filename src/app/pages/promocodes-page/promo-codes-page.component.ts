@@ -15,6 +15,6 @@ export class PromoCodesPageComponent implements OnInit {
   constructor(public promoCodeService: PromoCodeService) { }
 
   ngOnInit() {
-    this.promoCodes$ = this.promoCodeService.getPromoCodes();
+    this.promoCodes$ = this.promoCodeService.getAllPromoCodes();
   }
 }

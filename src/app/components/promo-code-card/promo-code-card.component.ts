@@ -1,7 +1,8 @@
 import { Component, Input } from '@angular/core';
+import * as moment from 'moment';
+import { Router } from '@angular/router';
 import { IPromoCode } from 'src/app/models/promo-code';
 import { PromoCodeService } from 'src/app/services/promo-code.service';
-
 @Component({
   selector: 'app-promo-code-card',
   templateUrl: './promo-code-card.component.html',
@@ -10,7 +11,15 @@ import { PromoCodeService } from 'src/app/services/promo-code.service';
 export class PromoCodeCardComponent {
   @Input() item: IPromoCode;
 
-  constructor(public promoCodeService: PromoCodeService) {
+  constructor(public promoCodeService: PromoCodeService, private router: Router) {
+  }
+
+  formatDate(date: Date): string {
+    return moment(date).format('DD.MM.YYYY');
+  }
+
+  editPromoCode(id: string) {
+    this.router.navigate(['/promo-codes', id]);
   }
 
 }
