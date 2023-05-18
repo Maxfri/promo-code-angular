@@ -1,0 +1,13 @@
+<div
+  class="items-list"
+  infiniteScroll
+  [infiniteScrollDistance]="2"
+  [infiniteScrollThrottle]="50"
+  (scrolled)="loadMore()"
+>
+  <app-promo-code-card
+    *ngFor="let promoCode of promoCodes"
+    [item]="promoCode"
+  >
+  </app-promo-code-card>
+</div>

@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { observable, action } from 'mobx-angular';
-import { IPromoCode } from '../models/promo-code';
+import * as moment from 'moment';
 import { BehaviorSubject, Observable, map } from 'rxjs';
+
+import { IPromoCode } from '../models/promo-code';
 import { mockData } from 'src/app/data/promo-codes';
 import { FilterType } from '../models/filter';
 
@@ -29,11 +31,11 @@ export class PromoCodeStore {
         if (this.filterType === FilterType.All) {
           return promoCodes;
         } else if (this.filterType === FilterType.Active) {
-          const currentDate = new Date();
-          return promoCodes.filter((promoCode) => promoCode.dateOfExpiry >= currentDate);
+          const currentDay = moment().startOf('day');
+          return promoCodes.filter((promoCode) => moment(promoCode.dateOfExpiry).startOf('day') >= currentDay);
         } else if (this.filterType === FilterType.Expired) {
-          const currentDate = new Date();
-          return promoCodes.filter((promoCode) => promoCode.dateOfExpiry < currentDate);
+          const currentDay = moment().startOf('day');
+          return promoCodes.filter((promoCode) => moment(promoCode.dateOfExpiry).startOf('day') < currentDay);
         } else {
           return [];
         }
@@ -48,7 +50,6 @@ export class PromoCodeStore {
   @action setFilterType(type: FilterType) {
     this.filterType = type;
     this.filterTypeSubject.next(this.filterType);
-    console.log(this.filterType);
   }
 
   @action addPromoCode(promoCode: IPromoCode) {

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { MobxAngularModule } from 'mobx-angular';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -15,6 +16,7 @@ import { CreatePromoCodeComponent } from './components/create-promocode/create-p
 import { MaterialModule } from '../material.module';
 import { FilterPromoCodePipe } from './pipes/filter-promo-code.pipe';
 import { FilterComponent } from './components/filter/filter.component';
+import { InfiniteListComponent } from './components/infinite-list/infinite-list.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +28,7 @@ import { FilterComponent } from './components/filter/filter.component';
     CreatePromoCodePageComponent,
     FilterPromoCodePipe,
     FilterComponent,
+    InfiniteListComponent,
   ],
   imports: [
     BrowserModule,
@@ -34,7 +37,8 @@ import { FilterComponent } from './components/filter/filter.component';
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
-    MobxAngularModule
+    MobxAngularModule,
+    InfiniteScrollModule
   ],
   providers: [],
   bootstrap: [AppComponent],

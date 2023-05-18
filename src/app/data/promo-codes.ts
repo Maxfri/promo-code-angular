@@ -1,4 +1,5 @@
 import { IPromoCode } from '../models/promo-code';
+import { v4 as uuidv4 } from 'uuid';
 
 export const mockData: IPromoCode[] = [
   {
@@ -13,6 +14,76 @@ export const mockData: IPromoCode[] = [
     "title": "Promocode 2",
     "description": "Description 2",
     "promoCode": "PROMOCODE2",
+    "dateOfExpiry": new Date("2023-05-16T10:34:41.238Z")
+  },
+  {
+    "id": uuidv4(),
+    "title": "Promocode 3",
+    "description": "Description 10",
+    "promoCode": "PROMOCODE10",
+    "dateOfExpiry": new Date()
+  },
+  {
+    "id": uuidv4(),
+    "title": "Promocode 3",
+    "description": "Description 10",
+    "promoCode": "PROMOCODE10",
+    "dateOfExpiry": new Date("2023-05-16T10:34:41.238Z")
+  },
+  {
+    "id": uuidv4(),
+    "title": "Promocode 3",
+    "description": "Description 10",
+    "promoCode": "PROMOCODE10",
+    "dateOfExpiry": new Date()
+  },
+  {
+    "id": uuidv4(),
+    "title": "Promocode 3",
+    "description": "Description 10",
+    "promoCode": "PROMOCODE10",
+    "dateOfExpiry": new Date("2023-05-16T10:34:41.238Z")
+  },
+  {
+    "id": uuidv4(),
+    "title": "Promocode 3",
+    "description": "Description 10",
+    "promoCode": "PROMOCODE10",
+    "dateOfExpiry": new Date()
+  },
+  {
+    "id": uuidv4(),
+    "title": "Promocode 3",
+    "description": "Description 10",
+    "promoCode": "PROMOCODE10",
+    "dateOfExpiry": new Date("2023-05-16T10:34:41.238Z")
+  },
+  {
+    "id": uuidv4(),
+    "title": "Promocode 3",
+    "description": "Description 10",
+    "promoCode": "PROMOCODE10",
+    "dateOfExpiry": new Date()
+  },
+  {
+    "id": uuidv4(),
+    "title": "Promocode 3",
+    "description": "Description 10",
+    "promoCode": "PROMOCODE10",
+    "dateOfExpiry": new Date("2023-05-16T10:34:41.238Z")
+  },
+  {
+    "id": uuidv4(),
+    "title": "Promocode 3",
+    "description": "Description 10",
+    "promoCode": "PROMOCODE10",
+    "dateOfExpiry": new Date()
+  },
+  {
+    "id": uuidv4(),
+    "title": "Promocode 3",
+    "description": "Description 10",
+    "promoCode": "PROMOCODE10",
     "dateOfExpiry": new Date("2023-05-16T10:34:41.238Z")
   },
   {
