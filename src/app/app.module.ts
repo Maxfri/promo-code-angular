@@ -14,6 +14,7 @@ import { PromoCodeCardComponent } from './components/promo-code-card/promo-code-
 import { CreatePromoCodeComponent } from './components/create-promocode/create-promocode.component';
 import { MaterialModule } from '../material.module';
 import { FilterPromoCodePipe } from './pipes/filter-promo-code.pipe';
+import { FilterComponent } from './components/filter/filter.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { FilterPromoCodePipe } from './pipes/filter-promo-code.pipe';
     PromoCodeCardComponent,
     CreatePromoCodePageComponent,
     FilterPromoCodePipe,
+    FilterComponent,
   ],
   imports: [
     BrowserModule,

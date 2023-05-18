@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
 })
 export class PromoCodeService {
   constructor(private promoCodeStore: PromoCodeStore) { }
+
   @action addPromoCode(promoCode: IPromoCode) {
     this.promoCodeStore.addPromoCode(promoCode);
   }
@@ -28,4 +29,5 @@ export class PromoCodeService {
   getPromoCodeById(promoCodeId: string): Observable<IPromoCode | undefined> {
     return this.promoCodeStore.getPromoCodeById(promoCodeId)
   }
+
 }

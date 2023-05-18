@@ -1,4 +1,5 @@
 <section class="page-wrapper">
+  <app-filter></app-filter>
   <app-promo-code-card
     *ngFor="let promoCode of promoCodes$ | async"
     [item]="promoCode"
