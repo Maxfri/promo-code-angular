@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { IPromoCode } from '../models/promo-code';
 import { action } from 'mobx-angular';
 import { PromoCodeStore } from '../store/store';
-import { Observable, map } from 'rxjs';
+import { Observable, delay, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -22,10 +22,14 @@ export class PromoCodeService {
     this.promoCodeStore.removePromoCode(promoCodeId);
   }
 
-  getAllPromoCodes(startIndex: number, size: number): Observable<IPromoCode[]> {
+  getAllPromoCodes(): Observable<IPromoCode[]> {
+    return this.promoCodeStore.getAllPromoCodesObservable();
+  }
+
+  getBatchPromoCodes(startIndex: number, size: number): Observable<IPromoCode[]> {
     return this.promoCodeStore.getAllPromoCodesObservable().pipe(
-      map((promoCodes) => promoCodes.slice(startIndex, startIndex + size))
-    );;
+      map((promoCodes) => promoCodes.slice(startIndex, startIndex + size)), delay(2000)
+    );
   }
 
   getPromoCodeById(promoCodeId: string): Observable<IPromoCode | undefined> {

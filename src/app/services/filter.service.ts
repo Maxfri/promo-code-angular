@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { PromoCodeStore } from '../store/store';
 import { FilterType } from '../models/filter';
-import { Observable } from 'rxjs';
+import { Observable, delay } from 'rxjs';
 import { IPromoCode } from '../models/promo-code';
 import { action } from 'mobx-angular';
 
@@ -17,10 +17,10 @@ export class FilterService {
   }
 
   getFilterTypeObservable(): Observable<FilterType> {
-    return this.promoCodeStore.getFilterTypeObservable();
+    return this.promoCodeStore.getFilterTypeObservable().pipe(delay(500));
   }
 
   getFilteredPromoCodesObservable(): Observable<IPromoCode[]> {
-    return this.promoCodeStore.getFilteredPromoCodes();
+    return this.promoCodeStore.getFilteredPromoCodes().pipe(delay(500));
   }
 }

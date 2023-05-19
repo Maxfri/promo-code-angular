@@ -7,6 +7,9 @@
       placeholder="Promo-code name"
       formControlName="title"
     />
+    <mat-error *ngIf="title.hasError('uniqueName')">
+      Promo code name must be unique.
+    </mat-error>
     <mat-error *ngIf="title.hasError('required')">
       Title is <strong>required</strong>
     </mat-error>

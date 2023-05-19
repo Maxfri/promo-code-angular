@@ -5,6 +5,7 @@ import { DateAdapter } from '@angular/material/core';
 import { v4 as uuidv4 } from 'uuid';
 
 import { PromoCodeService } from 'src/app/services/promo-code.service';
+import { PromoCodeNameValidator } from 'src/app/services/name-validator.service';
 
 @Component({
   selector: 'app-create-promocode',
@@ -14,12 +15,13 @@ import { PromoCodeService } from 'src/app/services/promo-code.service';
 export class CreatePromoCodeComponent implements OnInit {
   promoCodeId: string | null;
   minDate: Date = new Date();
-  form = new FormGroup({
+  form: FormGroup = new FormGroup({
     title: new FormControl<string>('', [
       Validators.required,
       Validators.minLength(3),
       Validators.maxLength(30),
-    ]),
+    ],
+      this.promoCodeNameValidator.validate.bind(this.promoCodeNameValidator)),
     promoCode: new FormControl<string>('', [
       Validators.required,
       Validators.minLength(1),
@@ -30,9 +32,11 @@ export class CreatePromoCodeComponent implements OnInit {
       Validators.maxLength(255),
     ]),
     dateOfExpiry: new FormControl<Date>(new Date()),
-  });
+  });;
 
-  constructor(private promoCodeService: PromoCodeService,
+  constructor(
+    private promoCodeService: PromoCodeService,
+    private promoCodeNameValidator: PromoCodeNameValidator,
     private dateAdapter: DateAdapter<Date>,
     private route: ActivatedRoute
   ) {
@@ -56,20 +60,21 @@ export class CreatePromoCodeComponent implements OnInit {
     }
   }
 
+
   get title() {
-    return this.form.controls.title as FormControl;
+    return this.form.controls["title"] as FormControl;
   }
 
   get promoCode() {
-    return this.form.controls.promoCode as FormControl;
+    return this.form.controls["promoCode"] as FormControl;
   }
 
   get description() {
-    return this.form.controls.description as FormControl;
+    return this.form.controls["description"] as FormControl;
   }
 
   get dateOfExpiry() {
-    return this.form.controls.dateOfExpiry as FormControl;
+    return this.form.controls["dateOfExpiry"] as FormControl;
   }
 
   submit() {

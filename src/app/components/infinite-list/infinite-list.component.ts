@@ -29,7 +29,7 @@ export class InfiniteListComponent implements OnInit {
 
   loadMore() {
     this.promoCodeService
-      .getAllPromoCodes(this.startIndex, this.size)
+      .getBatchPromoCodes(this.startIndex, this.size)
       .subscribe((codes: IPromoCode[]) => {
         this.promoCodes = this.promoCodes.concat(codes);
         this.startIndex += this.size;
