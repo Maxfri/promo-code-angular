@@ -17,6 +17,7 @@ import { MaterialModule } from '../material.module';
 import { FilterPromoCodePipe } from './pipes/filter-promo-code.pipe';
 import { FilterComponent } from './components/filter/filter.component';
 import { InfiniteListComponent } from './components/infinite-list/infinite-list.component';
+import { SearchComponent } from './components/search/search.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { InfiniteListComponent } from './components/infinite-list/infinite-list.
     FilterPromoCodePipe,
     FilterComponent,
     InfiniteListComponent,
+    SearchComponent,
   ],
   imports: [
     BrowserModule,

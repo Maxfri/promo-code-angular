@@ -15,35 +15,20 @@ export class InfiniteListComponent implements OnInit {
   promoCodes: IPromoCode[] = [];
   startIndex = 0;
   size = 8;
+  searchValue = ''
 
   constructor(public promoCodeService: PromoCodeService, private filterService: FilterService) { }
 
   ngOnInit() {
-    // this.promoCodes$ = this.promoCodeService.getAllPromoCodes(this.startIndex, this.size);
-    this.loadMore();
-
-    // this.filterService.getFilterTypeObservable().subscribe(() => {
-    //   this.promoCodes$ = this.filterService.getFilteredPromoCodesObservable();
-    // });
+    this.promoCodeService.getAllPromoCodes().subscribe((promoCodes) => {
+      console.log(promoCodes);
+      this.promoCodes = promoCodes;
+    })
   }
 
   loadMore() {
-    this.promoCodeService
-      .getBatchPromoCodes(this.startIndex, this.size)
-      .subscribe((codes: IPromoCode[]) => {
-        this.promoCodes = this.promoCodes.concat(codes);
-        this.startIndex += this.size;
-      });
+    
   }
 
-  // onScroll() {
-  //   this.startIndex += this.size;
-
-  //   const nextBatch$ = this.promoCodeService.getAllPromoCodes(this.startIndex, this.size);
-  //   nextBatch$.subscribe((observer) => console.log(observer));
-  //   this.promoCodes$ = this.promoCodes$.pipe(
-  //     scan((acc: IPromoCode[], curr: IPromoCode[]) => [...acc, ...curr], [] as IPromoCode[]),
-  //     concatMap(() => nextBatch$)
-  //   );
-  // }
+ 
 }
