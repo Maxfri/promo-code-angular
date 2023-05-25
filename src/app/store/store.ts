@@ -15,6 +15,8 @@ export class PromoCodeStore {
   @observable filterType: FilterType = FilterType.All;
   private filterTypeSubject: BehaviorSubject<FilterType> = new BehaviorSubject<FilterType>(FilterType.All);
 
+  @observable searchValue: string = '';
+
   getAllPromoCodesObservable(): Observable<IPromoCode[]> {
     return this.promoCodesSubject.asObservable();
   }
@@ -68,5 +70,13 @@ export class PromoCodeStore {
       this.promoCodes[index] = promoCode;
       this.promoCodesSubject.next(this.promoCodes);
     }
+  }
+
+  @action setSearchValue(value: string) {
+    this.searchValue = value;
+  }
+
+  getSearchValueObservable(): Observable<FilterType> {
+    return this.filterTypeSubject.asObservable();
   }
 }

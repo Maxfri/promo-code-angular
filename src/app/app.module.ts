@@ -18,6 +18,7 @@ import { FilterPromoCodePipe } from './pipes/filter-promo-code.pipe';
 import { FilterComponent } from './components/filter/filter.component';
 import { InfiniteListComponent } from './components/infinite-list/infinite-list.component';
 import { SearchComponent } from './components/search/search.component';
+import { HighlightDirective } from './directives/highlight/highlight.directive';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { SearchComponent } from './components/search/search.component';
     FilterComponent,
     InfiniteListComponent,
     SearchComponent,
+    HighlightDirective
   ],
   imports: [
     BrowserModule,
