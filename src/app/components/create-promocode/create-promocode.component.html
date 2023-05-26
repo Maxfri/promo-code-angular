@@ -7,12 +7,11 @@
       placeholder="Promo-code name"
       formControlName="title"
     />
-    <mat-error *ngIf="title.hasError('uniqueName')">
-      Promo code name must be unique.
-    </mat-error>
-    <mat-error *ngIf="title.hasError('required')">
-      Title is <strong>required</strong>
-    </mat-error>
+      <mat-error *ngIf="title?.errors?.['required']">Название является обязательным полем.</mat-error>
+      <mat-error *ngIf="title?.errors?.['minlength']">Название должно содержать минимум 3 символа.</mat-error>
+      <mat-error *ngIf="title?.errors?.['maxlength']">Название должно содержать максимум 30 символов.</mat-error>
+      <mat-error *ngIf="title?.errors?.['pattern']">Название может содержать только буквы и цифры.</mat-error>
+      <mat-error *ngIf="title?.errors?.['nameTaken']">Данное название уже занято.</mat-error>
   </mat-form-field>
 
   <mat-form-field class="full-width">
@@ -23,14 +22,16 @@
       placeholder="promo-code"
       formControlName="promoCode"
     />
-    <mat-error *ngIf="promoCode.hasError('required')">
-      Promocode is <strong>required</strong>
-    </mat-error>
+    <mat-error *ngIf="promoCode?.errors?.['required']">Промокод является обязательным полем.</mat-error>
+    <mat-error *ngIf="promoCode?.errors?.['minlength']">Промокод должен содержать минимум 1 символ.</mat-error>
+    <mat-error *ngIf="promoCode?.errors?.['maxlength']">Промокод должен содержать максимум 10 символов.</mat-error>
   </mat-form-field>
 
   <mat-form-field class="full-width">
     <mat-label>Description</mat-label>
     <input matInput placeholder="Description" formControlName="description" />
+    <mat-error *ngIf="description?.errors?.['minlength']">Описание должно содержать минимум 3 символа.</mat-error>
+    <mat-error *ngIf="description?.errors?.['maxlength']">Описание должно содержать максимум 255 символов.</mat-error>
   </mat-form-field>
 
   <mat-form-field appearance="fill" class="full-width">
@@ -45,7 +46,6 @@
     mat-raised-button
     color="primary"
     type="submit"
-    [disabled]="form.invalid"
   >
     Create
   </button>

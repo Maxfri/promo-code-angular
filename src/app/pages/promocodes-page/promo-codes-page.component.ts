@@ -6,6 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./promo-codes-page.component.scss'],
 })
 export class PromoCodesPageComponent {
-  loading = false;
 
 }

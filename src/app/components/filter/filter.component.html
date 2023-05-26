@@ -2,7 +2,7 @@
   <mat-label for="filterSelect">Filter:</mat-label>
   <mat-select
     id="filterSelect"
-    [ngModel]="selectedFilter$ | async"
+    [ngModel]="selectedFilter"
     (ngModelChange)="onFilterChange($event)"
   >
     <mat-option *ngFor="let option of filterOptions" [value]="option">

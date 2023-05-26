@@ -20,19 +20,19 @@ export class CreatePromoCodeComponent implements OnInit {
       Validators.required,
       Validators.minLength(3),
       Validators.maxLength(30),
-    ],
-      this.promoCodeNameValidator.validate.bind(this.promoCodeNameValidator)),
+      Validators.pattern(/^[a-zA-Z0-9]+$/)
+    ], [this.promoCodeNameValidator.validateName.bind(this.promoCodeNameValidator)]),
     promoCode: new FormControl<string>('', [
       Validators.required,
       Validators.minLength(1),
-      Validators.maxLength(10),
+      Validators.maxLength(10)
     ]),
     description: new FormControl<string>('', [
       Validators.minLength(3),
       Validators.maxLength(255),
     ]),
     dateOfExpiry: new FormControl<Date>(new Date()),
-  });;
+  });
 
   constructor(
     private promoCodeService: PromoCodeService,
@@ -62,26 +62,29 @@ export class CreatePromoCodeComponent implements OnInit {
 
 
   get title() {
-    return this.form.controls["title"] as FormControl;
+    return this.form.get("title");
   }
 
   get promoCode() {
-    return this.form.controls["promoCode"] as FormControl;
+    return this.form.get("promoCode");
   }
 
   get description() {
-    return this.form.controls["description"] as FormControl;
+    return this.form.get("description");
   }
 
   get dateOfExpiry() {
-    return this.form.controls["dateOfExpiry"] as FormControl;
+    return this.form.get("dateOfExpiry");
   }
 
   submit() {
+    if (this.form.invalid) return;
+    const promoCodeValue = this.promoCode?.value.trim();
+
     const formData = {
       title: this.form.value.title as string,
       description: this.form.value.description as string,
-      promoCode: this.form.value.promoCode as string,
+      promoCode: promoCodeValue as string,
       dateOfExpiry: this.form.value.dateOfExpiry as Date,
     };
 

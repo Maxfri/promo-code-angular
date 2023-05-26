@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { FilterType } from 'src/app/models/filter';
 import { FilterService } from 'src/app/services/filter.service';
+import { PromoCodeStore } from 'src/app/store/store';
 
 @Component({
   selector: 'app-filter',
@@ -11,12 +12,12 @@ import { FilterService } from 'src/app/services/filter.service';
 export class FilterComponent implements OnInit {
 
   filterOptions: FilterType[] = [FilterType.All, FilterType.Active, FilterType.Expired];
-  selectedFilter$: Observable<FilterType>;
+  selectedFilter: FilterType;
 
-  constructor(private filterService: FilterService) { }
+  constructor(private filterService: FilterService, private promoCodeStore: PromoCodeStore) { }
 
   ngOnInit(): void {
-    this.selectedFilter$ = this.filterService.getFilterTypeObservable();
+    this.selectedFilter = this.promoCodeStore.getFilterType();
   }
 
   onFilterChange(type: FilterType) {

@@ -27,26 +27,8 @@ export class PromoCodeStore {
     );
   }
 
-  getFilteredPromoCodes(): Observable<IPromoCode[]> {
-    return this.promoCodesSubject.asObservable().pipe(
-      map((promoCodes) => {
-        if (this.filterType === FilterType.All) {
-          return promoCodes;
-        } else if (this.filterType === FilterType.Active) {
-          const currentDay = moment().startOf('day');
-          return promoCodes.filter((promoCode) => moment(promoCode.dateOfExpiry).startOf('day') >= currentDay);
-        } else if (this.filterType === FilterType.Expired) {
-          const currentDay = moment().startOf('day');
-          return promoCodes.filter((promoCode) => moment(promoCode.dateOfExpiry).startOf('day') < currentDay);
-        } else {
-          return [];
-        }
-      })
-    );
-  }
-
-  getFilterTypeObservable(): Observable<FilterType> {
-    return this.filterTypeSubject.asObservable();
+  getFilterType(): FilterType {
+    return this.filterType;
   }
 
   @action setFilterType(type: FilterType) {
