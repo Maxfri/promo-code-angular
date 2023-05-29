@@ -6,7 +6,7 @@
   (scrolled)="loadMore()"
 >
   <app-promo-code-card
-    *ngFor="let promoCode of promoCodes | filterPromoCode : searchValue"
+    *ngFor="let promoCode of promoCodes"
     [item]="promoCode"
   >
   </app-promo-code-card>

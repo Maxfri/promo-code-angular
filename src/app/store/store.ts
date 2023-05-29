@@ -1,64 +1,40 @@
 import { Injectable } from '@angular/core';
-import { observable, action } from 'mobx-angular';
-import * as moment from 'moment';
-import { BehaviorSubject, Observable, map } from 'rxjs';
+import { makeObservable, observable, action } from 'mobx';
 
 import { IPromoCode } from '../models/promo-code';
-import { mockData } from 'src/app/data/promo-codes';
-import { FilterType } from '../models/filter';
+import { PromoCodeService } from '../services/promo-code.service';
 
 @Injectable({ providedIn: 'root' })
 export class PromoCodeStore {
-  @observable promoCodes: IPromoCode[] = mockData;
-  private promoCodesSubject: BehaviorSubject<IPromoCode[]> = new BehaviorSubject<IPromoCode[]>(mockData);
+  promoCodes: IPromoCode[] = [];
 
-  @observable filterType: FilterType = FilterType.All;
-  private filterTypeSubject: BehaviorSubject<FilterType> = new BehaviorSubject<FilterType>(FilterType.All);
-
-  @observable searchValue: string = '';
-
-  getAllPromoCodesObservable(): Observable<IPromoCode[]> {
-    return this.promoCodesSubject.asObservable();
+  constructor(private promoCodeService: PromoCodeService) {
+    makeObservable(this, {
+      promoCodes: observable,
+      fetchPromoCodes: action,
+      createPromoCode: action,
+      updatePromoCode: action,
+      deletePromoCode: action,
+    });
   }
 
-  getPromoCodeById(promoCodeId: string): Observable<IPromoCode | undefined> {
-    return this.promoCodesSubject.asObservable().pipe(
-      map((promoCodes) => promoCodes.find((promoCode) => promoCode.id === promoCodeId))
-    );
+  async fetchPromoCodes() {
+    await this.promoCodeService.fetchPromoCodes();
+    this.promoCodes = this.promoCodeService.promoCodes;
   }
 
-  getFilterType(): FilterType {
-    return this.filterType;
+  async createPromoCode(promoCode: IPromoCode) {
+    await this.promoCodeService.createPromoCode(promoCode);
+    await this.fetchPromoCodes();
   }
 
-  @action setFilterType(type: FilterType) {
-    this.filterType = type;
-    this.filterTypeSubject.next(this.filterType);
+  async updatePromoCode(promoCode: IPromoCode) {
+    await this.promoCodeService.updatePromoCode(promoCode);
+    await this.fetchPromoCodes();
   }
 
-  @action addPromoCode(promoCode: IPromoCode) {
-    this.promoCodes.push(promoCode);
-    this.promoCodesSubject.next(this.promoCodes);
-  }
-
-  @action removePromoCode(promoCodeId: string) {
-    this.promoCodes = this.promoCodes.filter(code => code.id !== promoCodeId);
-    this.promoCodesSubject.next(this.promoCodes);
-  }
-
-  @action editPromoCode(promoCode: IPromoCode) {
-    const index = this.promoCodes.findIndex((code) => code.id === promoCode.id);
-    if (index !== -1) {
-      this.promoCodes[index] = promoCode;
-      this.promoCodesSubject.next(this.promoCodes);
-    }
-  }
-
-  @action setSearchValue(value: string) {
-    this.searchValue = value;
-  }
-
-  getSearchValueObservable(): Observable<FilterType> {
-    return this.filterTypeSubject.asObservable();
+  async deletePromoCode(id: string) {
+    await this.promoCodeService.deletePromoCode(id);
+    await this.fetchPromoCodes();
   }
 }

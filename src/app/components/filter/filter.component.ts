@@ -17,11 +17,11 @@ export class FilterComponent implements OnInit {
   constructor(private filterService: FilterService, private promoCodeStore: PromoCodeStore) { }
 
   ngOnInit(): void {
-    this.selectedFilter = this.promoCodeStore.getFilterType();
+    // this.selectedFilter = this.promoCodeStore.getFilterType();
   }
 
   onFilterChange(type: FilterType) {
-    this.filterService.setFilterType(type);
-    this.filterService.getFilteredPromoCodesObservable();
+    // this.filterService.setFilterType(type);
+    // this.filterService.getFilteredPromoCodesObservable();
   }
 }

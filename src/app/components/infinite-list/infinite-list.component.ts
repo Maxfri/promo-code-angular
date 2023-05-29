@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, concat, takeUntil } from 'rxjs';
+import { observable } from 'mobx-angular';
 import { IPromoCode } from 'src/app/models/promo-code';
-import { FilterService } from 'src/app/services/filter.service';
-import { PromoCodeService } from 'src/app/services/promo-code.service';
-import { concatMap, scan } from 'rxjs/operators';
 import { PromoCodeStore } from 'src/app/store/store';
 
 @Component({
@@ -12,23 +9,21 @@ import { PromoCodeStore } from 'src/app/store/store';
   styleUrls: ['./infinite-list.component.scss']
 })
 export class InfiniteListComponent implements OnInit {
-  // promoCodes$: Observable<IPromoCode[]>;
-  promoCodes: IPromoCode[] = [];
-  startIndex = 0;
-  size = 8;
-  searchValue = ''
+  @observable promoCodes: IPromoCode[];
 
-  constructor(public promoCodeStore: PromoCodeStore, private filterService: FilterService) { }
+  constructor(private promoCodeStore: PromoCodeStore) { }
 
-  ngOnInit() {
-    this.promoCodeStore.getAllPromoCodesObservable().subscribe((promoCodes) => {
-      this.promoCodes = promoCodes;
-    })
+  ngOnInit(): void {
+    this.fetchPromoCodes();
+  }
+
+  async fetchPromoCodes(): Promise<void> {
+    await this.promoCodeStore.fetchPromoCodes();
+    this.promoCodes = this.promoCodeStore.promoCodes;
   }
 
   loadMore() {
-
+    
   }
-
 
 }

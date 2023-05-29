@@ -12,7 +12,7 @@ export class PromoCodeCardComponent implements OnChanges {
   @Input() item: IPromoCode;
   isExpiry: boolean = false;
 
-  constructor(public promoCodeService: PromoCodeService, private router: Router) {
+  constructor(private promoCodeService: PromoCodeService, private router: Router) {
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -27,6 +27,10 @@ export class PromoCodeCardComponent implements OnChanges {
 
   editPromoCode(id: string) {
     this.router.navigate(['/promo-codes', id]);
+  }
+
+  removePromoCode(id: string) {
+    this.promoCodeService.deletePromoCode(id)
   }
 
   private checkExpiry() {

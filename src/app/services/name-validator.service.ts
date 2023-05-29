@@ -10,13 +10,13 @@ import { PromoCodeService } from './promo-code.service';
 export class PromoCodeNameValidator {
   constructor(private promoCodeService: PromoCodeService) { }
 
-  validateName(control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
-    return this.promoCodeService.getAllPromoCodes().pipe(
-      map(promoCodes => {
-        const nameExists = promoCodes.some((item) => item.title === control.value);
-        console.log(nameExists);
-        return nameExists ? { uniqueName: true } : null;
-      })
-    );
-  }
+  // validateName(control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
+  //   return this.promoCodeService.getAllPromoCodes().pipe(
+  //     map(promoCodes => {
+  //       const nameExists = promoCodes.some((item) => item.title === control.value);
+  //       console.log(nameExists);
+  //       return nameExists ? { uniqueName: true } : null;
+  //     })
+  //   );
+  // }
 }

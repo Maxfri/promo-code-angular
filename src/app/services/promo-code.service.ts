@@ -1,62 +1,77 @@
 import { Injectable } from '@angular/core';
 import { IPromoCode } from '../models/promo-code';
-import { action } from 'mobx-angular';
-import { PromoCodeStore } from '../store/store';
-import { Observable, delay, map } from 'rxjs';
+import { action, makeObservable, observable } from 'mobx';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PromoCodeService {
-  constructor(private promoCodeStore: PromoCodeStore, private http: HttpClient) { }
+  promoCodes: IPromoCode[] = [];
+  url = 'http//:localhost:300/'
 
-  @action addPromoCode(promoCode: IPromoCode) {
-    this.promoCodeStore.addPromoCode(promoCode);
+  constructor(private http: HttpClient) {
+    makeObservable(this, {
+      promoCodes: observable,
+      fetchPromoCodes: action,
+      createPromoCode: action,
+      updatePromoCode: action,
+      deletePromoCode: action,
+    });
   }
 
-  @action editPromoCode(promoCode: IPromoCode) {
-    this.promoCodeStore.editPromoCode(promoCode);
+  async fetchPromoCodes() {
+    try {
+      const response = await this.http.get<IPromoCode[]>(`/api/promo-codes`).toPromise();
+      if (response) {
+        this.promoCodes = response;
+      }
+    } catch (error) {
+      console.error('Error fetching promo codes:', error);
+    }
   }
 
-  @action removePromoCode(promoCodeId: string) {
-    this.promoCodeStore.removePromoCode(promoCodeId);
+  fetchPromoCode(id: string) {
+    try {
+      const response = this.http.get<IPromoCode>(`/api/promo-codes/${id}`);
+      return response;
+    } catch (error) {
+      console.error('Error fetching promo codes:', error);
+      return;
+    }
   }
 
-  getAllPromoCodes(): Observable<IPromoCode[]> {
-    return this.promoCodeStore.getAllPromoCodesObservable();
+  async createPromoCode(promoCode: IPromoCode) {
+    try {
+      const response = await this.http.post<IPromoCode>('/api/promo-codes', promoCode).toPromise();
+      if (response) {
+        this.promoCodes.push(response);
+      }
+    } catch (error) {
+      console.error('Error creating promo code:', error);
+    }
   }
 
-  getBatchPromoCodes(startIndex: number, size: number): Observable<IPromoCode[]> {
-    return this.promoCodeStore.getAllPromoCodesObservable().pipe(
-      map((promoCodes) => promoCodes.slice(startIndex, startIndex + size)), delay(2000)
-    );
+  async updatePromoCode(promoCode: IPromoCode) {
+    try {
+      await this.http.put(`/api/promo-codes/${promoCode.id}`, promoCode).toPromise();
+      const index = this.promoCodes.findIndex((promo) => promo.id === promoCode.id);
+      if (index !== -1) {
+        this.promoCodes[index] = promoCode;
+      }
+    } catch (error) {
+      console.error('Error updating promo code:', error);
+    }
   }
 
-  getPromoCodeById(promoCodeId: string): Observable<IPromoCode | undefined> {
-    return this.promoCodeStore.getPromoCodeById(promoCodeId)
-  }
-
-  private apiUrl = 'https://api.example.com/promocodes'; // Замените на URL вашего бэкэнда
-
-
-
-  getPromoCodes(): Observable<IPromoCode> {
-    return this.http.get<IPromoCode>(this.apiUrl);
-  }
-
-  createPromoCode(promoCode: IPromoCode): Observable<IPromoCode> {
-    return this.http.post<IPromoCode>(this.apiUrl, promoCode);
-  }
-
-  updatePromoCode(promoCode: IPromoCode): Observable<IPromoCode> {
-    const url = `${this.apiUrl}/${promoCode.id}`;
-    return this.http.put<IPromoCode>(url, promoCode);
-  }
-
-  deletePromoCode(promoCodeId: string): Observable<IPromoCode> {
-    const url = `${this.apiUrl}/${promoCodeId}`;
-    return this.http.delete<IPromoCode>(url);
+  async deletePromoCode(id: string) {
+    try {
+      await this.http.delete(`/api/promo-codes/${id}`).toPromise();
+      this.promoCodes = this.promoCodes.filter((promo) => promo.id !== id);
+    } catch (error) {
+      console.error('Error deleting promo code:', error);
+    }
   }
 
 }

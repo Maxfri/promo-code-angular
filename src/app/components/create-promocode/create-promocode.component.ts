@@ -21,7 +21,7 @@ export class CreatePromoCodeComponent implements OnInit {
       Validators.minLength(3),
       Validators.maxLength(30),
       Validators.pattern(/^[a-zA-Z0-9]+$/)
-    ], [this.promoCodeNameValidator.validateName.bind(this.promoCodeNameValidator)]),
+    ], []),
     promoCode: new FormControl<string>('', [
       Validators.required,
       Validators.minLength(1),
@@ -46,8 +46,8 @@ export class CreatePromoCodeComponent implements OnInit {
   ngOnInit() {
     this.promoCodeId = this.route.snapshot.paramMap.get('id');
     if (this.promoCodeId) {
-      const promoCode = this.promoCodeService.getPromoCodeById(this.promoCodeId);
-      promoCode.subscribe((promoCodeData) => {
+      const promoCode = this.promoCodeService.fetchPromoCode(this.promoCodeId);
+      promoCode?.subscribe((promoCodeData) => {
         if (promoCodeData) {
           this.form.patchValue({
             title: promoCodeData.title,
@@ -89,12 +89,12 @@ export class CreatePromoCodeComponent implements OnInit {
     };
 
     if (this.promoCodeId) {
-      this.promoCodeService.editPromoCode({
+      this.promoCodeService.updatePromoCode({
         id: this.promoCodeId,
         ...formData
       });
     } else {
-      this.promoCodeService.addPromoCode({
+      this.promoCodeService.createPromoCode({
         id: uuidv4(),
         ...formData
       });
