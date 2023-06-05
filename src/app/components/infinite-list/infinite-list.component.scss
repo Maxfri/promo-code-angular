@@ -5,3 +5,10 @@
   grid-column-gap: 40px;
   grid-row-gap: 40px;
 }
+
+.btns-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}

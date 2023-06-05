@@ -7,11 +7,21 @@
       placeholder="Promo-code name"
       formControlName="title"
     />
-      <mat-error *ngIf="title?.errors?.['required']">Название является обязательным полем.</mat-error>
-      <mat-error *ngIf="title?.errors?.['minlength']">Название должно содержать минимум 3 символа.</mat-error>
-      <mat-error *ngIf="title?.errors?.['maxlength']">Название должно содержать максимум 30 символов.</mat-error>
-      <mat-error *ngIf="title?.errors?.['pattern']">Название может содержать только буквы и цифры.</mat-error>
-      <mat-error *ngIf="title?.errors?.['nameTaken']">Данное название уже занято.</mat-error>
+    <mat-error *ngIf="title?.errors?.['required']">
+      Название является обязательным полем.
+    </mat-error>
+    <mat-error *ngIf="title?.errors?.['minlength']">
+      Название должно содержать минимум 3 символа.
+    </mat-error>
+    <mat-error *ngIf="title?.errors?.['maxlength']">
+      Название должно содержать максимум 30 символов.
+    </mat-error>
+    <mat-error *ngIf="title?.errors?.['pattern']">
+      Название может содержать только буквы и цифры.
+    </mat-error>
+    <mat-error *ngIf="title?.errors?.['nameTaken']">
+      Данное название уже занято.
+    </mat-error>
   </mat-form-field>
 
   <mat-form-field class="full-width">
@@ -22,31 +32,42 @@
       placeholder="promo-code"
       formControlName="promoCode"
     />
-    <mat-error *ngIf="promoCode?.errors?.['required']">Промокод является обязательным полем.</mat-error>
-    <mat-error *ngIf="promoCode?.errors?.['minlength']">Промокод должен содержать минимум 1 символ.</mat-error>
-    <mat-error *ngIf="promoCode?.errors?.['maxlength']">Промокод должен содержать максимум 10 символов.</mat-error>
+    <mat-error *ngIf="promoCode?.errors?.['required']">
+      Промокод является обязательным полем.
+    </mat-error>
+    <mat-error *ngIf="promoCode?.errors?.['minlength']">
+      Промокод должен содержать минимум 1 символ.
+    </mat-error>
+    <mat-error *ngIf="promoCode?.errors?.['maxlength']">
+      Промокод должен содержать максимум 10 символов.
+    </mat-error>
   </mat-form-field>
 
   <mat-form-field class="full-width">
     <mat-label>Description</mat-label>
     <input matInput placeholder="Description" formControlName="description" />
-    <mat-error *ngIf="description?.errors?.['minlength']">Описание должно содержать минимум 3 символа.</mat-error>
-    <mat-error *ngIf="description?.errors?.['maxlength']">Описание должно содержать максимум 255 символов.</mat-error>
+    <mat-error *ngIf="description?.errors?.['minlength']">
+      Описание должно содержать минимум 3 символа.
+    </mat-error>
+    <mat-error *ngIf="description?.errors?.['maxlength']">
+      Описание должно содержать максимум 255 символов.
+    </mat-error>
   </mat-form-field>
 
   <mat-form-field appearance="fill" class="full-width">
     <mat-label>Choose a date of expire</mat-label>
-    <input matInput [matDatepicker]="picker" formControlName="dateOfExpiry" [min]="minDate" />
+    <input
+      matInput
+      [matDatepicker]="picker"
+      formControlName="dateOfExpiry"
+      [min]="minDate"
+    />
     <mat-hint>DD.MM.YYYY</mat-hint>
     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
 
-  <button
-    mat-raised-button
-    color="primary"
-    type="submit"
-  >
-    Create
+  <button mat-raised-button color="primary" type="submit">
+    {{ promoCodeId ? "Update" : "Create" }}
   </button>
 </form>

@@ -11,4 +11,16 @@
   >
   </app-promo-code-card>
   <div *ngIf="!promoCodes.length">Promocodes didn't found</div>
+  <app-modal *ngIf="isModalOpen">
+    <h2>Are you sure you want to remove this promo code?</h2>
+    <div class="btns-wrapper">
+      <button mat-flat-button color="primary" (click)="handleCloseModal()">
+        No
+      </button>
+      <button mat-flat-button color="warn" (click)="removePromoCode()">
+        <mat-icon>delete</mat-icon>
+        Yes
+      </button>
+    </div>
+  </app-modal>
 </div>

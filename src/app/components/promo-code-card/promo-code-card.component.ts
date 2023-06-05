@@ -1,25 +1,33 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import * as moment from 'moment';
 import { Router } from '@angular/router';
 import { IPromoCode } from 'src/app/models/promo-code';
 import { PromoCodeService } from 'src/app/services/promo-code.service';
+import { PromoCodeStore } from 'src/app/store/store';
 @Component({
   selector: 'app-promo-code-card',
   templateUrl: './promo-code-card.component.html',
   styleUrls: ['./promo-code-card.component.scss'],
 })
-export class PromoCodeCardComponent implements OnChanges {
+export class PromoCodeCardComponent implements OnChanges, OnInit {
   @Input() item: IPromoCode;
   isExpiry: boolean = false;
-  isModalOpen: boolean = false;
 
-  constructor(private promoCodeService: PromoCodeService, private router: Router) {
+  constructor(
+    private promoCodeService: PromoCodeService,
+    private promoCodeStore: PromoCodeStore,
+    private router: Router
+  ) {
+
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['item']) {
       this.checkExpiry();
     }
+  }
+
+  ngOnInit(): void {
   }
 
   formatDate(date: Date): string {
@@ -30,13 +38,8 @@ export class PromoCodeCardComponent implements OnChanges {
     this.router.navigate(['/promo-codes', id]);
   }
 
-  removePromoCode(id: string) {
-    this.promoCodeService.deletePromoCode(id);
-    this.isModalOpen = false;
-  }
-
-  handleopenModal() {
-    this.isModalOpen = !this.isModalOpen;
+  handleOpenModal(currentId: string) {
+    this.promoCodeStore.openModal(currentId);
   }
 
   private checkExpiry() {

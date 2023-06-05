@@ -2,30 +2,24 @@
   <mat-card-header>
     <mat-card-title-group>
       <mat-card-title>Title: {{ item.title }}</mat-card-title>
-      <mat-card-subtitle *ngIf="item.description">Description: {{ item.description }}</mat-card-subtitle>
+      <mat-card-subtitle *ngIf="item.description">
+        Description: {{ item.description }}
+      </mat-card-subtitle>
     </mat-card-title-group>
   </mat-card-header>
   <mat-card-content>
     <span>{{ item.promoCode | uppercase }}</span>
     <mat-divider></mat-divider>
     <span>
-      Expiration date:{{ formatDate(item.dateOfExpiry) | uppercase }}</span>
+      Expiration date:{{ formatDate(item.dateOfExpiry) | uppercase }}
+    </span>
   </mat-card-content>
   <mat-card-actions class="item-actions">
     <button mat-flat-button color="primary" (click)="editPromoCode(item.id)">
       Edit
     </button>
-    <button mat-mini-fab color="warn" (click)="handleopenModal()">
+    <button mat-mini-fab color="warn" (click)="handleOpenModal(item.id)">
       <mat-icon>delete</mat-icon>
     </button>
   </mat-card-actions>
 </mat-card>
-<app-modal *ngIf="isModalOpen">
-  <h2>Are you sure you want to remove this promo code?</h2>
-  <button mat-flat-button color="primary" (click)="handleopenModal()">
-    No
-  </button>
-  <button mat-mini-fab color="warn" (click)="removePromoCode(item.id)">
-    <mat-icon>delete</mat-icon>
-  </button>
-</app-modal>

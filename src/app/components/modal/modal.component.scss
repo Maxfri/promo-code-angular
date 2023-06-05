@@ -5,10 +5,17 @@
   left: 0;
   right: 0;
   opacity: 0.6;
-  background: #fc0; /* Цвет фона */
+  background: rgb(26, 140, 233); /* Цвет фона */
 }
 
 .modal {
   position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  border-radius: 10%;
   top: 200px;
+  background: white;
 }

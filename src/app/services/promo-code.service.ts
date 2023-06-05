@@ -2,31 +2,37 @@ import { Injectable } from '@angular/core';
 import { IPromoCode } from '../models/promo-code';
 import { action, makeObservable, observable } from 'mobx';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
+import { PromoCodeStore } from '../store/store';
+import { FilterType } from '../models/filter';
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PromoCodeService {
   promoCodes: IPromoCode[] = [];
-  url = 'http//:localhost:300/'
+  url = 'https://ng-promo-code-default-rtdb.europe-west1.firebasedatabase.app'
 
-  constructor(private http: HttpClient) {
-    makeObservable(this, {
-      promoCodes: observable,
-      fetchPromoCodes: action,
-      createPromoCode: action,
-      updatePromoCode: action,
-      deletePromoCode: action,
-    });
-  }
+  constructor(private http: HttpClient, private promoCodeStore: PromoCodeStore) { }
 
-  async fetchPromoCodes() {
+  fetchPromoCodes() {
+    const filterType = this.promoCodeStore.getFilterType();
+
     try {
-      const response = await this.http.get<IPromoCode[]>(`/api/promo-codes`).toPromise();
-      if (response) {
-        this.promoCodes = response;
-      }
+      this.http.get<IPromoCode[]>(`${this.url}/promo-codes.json`)
+        .pipe(
+          map((responseData) => {
+            const promoCodes: IPromoCode[] = [];
+            for (const key in responseData) {
+              promoCodes.push({ ...responseData[key], id: key });
+            }
+            return promoCodes;
+          })
+        ).subscribe((responseData) => {
+          this.promoCodes = responseData;
+          this.promoCodeStore.setPromoCodes(this.promoCodes);
+        });
     } catch (error) {
       console.error('Error fetching promo codes:', error);
     }
@@ -34,7 +40,7 @@ export class PromoCodeService {
 
   fetchPromoCode(id: string) {
     try {
-      const response = this.http.get<IPromoCode>(`/api/promo-codes/${id}`);
+      const response = this.http.get<IPromoCode>(`${this.url}/promo-codes/${id}.json`);
       return response;
     } catch (error) {
       console.error('Error fetching promo codes:', error);
@@ -42,20 +48,23 @@ export class PromoCodeService {
     }
   }
 
-  async createPromoCode(promoCode: IPromoCode) {
+  createPromoCode(promoCode: IPromoCode) {
     try {
-      const response = await this.http.post<IPromoCode>('/api/promo-codes', promoCode).toPromise();
-      if (response) {
-        this.promoCodes.push(response);
-      }
+      this.http.post<IPromoCode>(`${this.url}/promo-codes.json`, promoCode)
+        .subscribe((responseData) => {
+          this.promoCodes.push(responseData);
+          this.promoCodeStore.setPromoCodes(this.promoCodes);
+        });
     } catch (error) {
       console.error('Error creating promo code:', error);
     }
   }
 
-  async updatePromoCode(promoCode: IPromoCode) {
+  updatePromoCode(promoCode: IPromoCode) {
     try {
-      await this.http.put(`/api/promo-codes/${promoCode.id}`, promoCode).toPromise();
+      this.http.put<IPromoCode>(`${this.url}/promo-codes/${promoCode.id}.json`, promoCode).subscribe((responseData) => {
+        return responseData;
+      })
       const index = this.promoCodes.findIndex((promo) => promo.id === promoCode.id);
       if (index !== -1) {
         this.promoCodes[index] = promoCode;
@@ -65,32 +74,18 @@ export class PromoCodeService {
     }
   }
 
-  async deletePromoCode(id: string) {
+  deletePromoCode(id: string) {
     try {
-      await this.http.delete(`/api/promo-codes/${id}`).toPromise();
+      this.http.delete(`${this.url}/promo-codes/${id}.json`).pipe((responseData) => {
+        console.log(responseData);
+        return responseData;
+      }).subscribe(() => {
+        return;
+      });
       this.promoCodes = this.promoCodes.filter((promo) => promo.id !== id);
+      this.promoCodeStore.setPromoCodes(this.promoCodes);
     } catch (error) {
       console.error('Error deleting promo code:', error);
     }
   }
-
-    // getFilteredPromoCodesObservable(): Observable<IPromoCode[]> {
-  //   const filterType = this.promoCodeStore.getFilterType();
-  //   return this.promoCodeStore.getAllPromoCodesObservable().pipe(
-  //     map((promoCodes) => {
-  //       if (filterType === FilterType.All) {
-  //         return promoCodes;
-  //       } else if (filterType === FilterType.Active) {
-  //         const currentDay = moment().startOf('day');
-  //         return promoCodes.filter((promoCode) => moment(promoCode.dateOfExpiry).startOf('day') >= currentDay);
-  //       } else if (filterType === FilterType.Expired) {
-  //         const currentDay = moment().startOf('day');
-  //         return promoCodes.filter((promoCode) => moment(promoCode.dateOfExpiry).startOf('day') < currentDay);
-  //       } else {
-  //         return [];
-  //       }
-  //     })
-  //   );
-  // }
-
 }
