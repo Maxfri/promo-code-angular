@@ -9,17 +9,16 @@ import { PromoCodeStore } from 'src/app/store/store';
   styleUrls: ['./infinite-list.component.scss']
 })
 export class InfiniteListComponent implements OnInit {
-  @observable promoCodes: IPromoCode[];
+  @observable promoCodes: IPromoCode[] = [];
 
   constructor(private promoCodeStore: PromoCodeStore) { }
 
   ngOnInit(): void {
-    this.fetchPromoCodes();
+    
   }
 
-  async fetchPromoCodes(): Promise<void> {
-    await this.promoCodeStore.fetchPromoCodes();
-    this.promoCodes = this.promoCodeStore.promoCodes;
+  getPromoCodes() {
+    this.promoCodeStore.getPromoCodes();
   }
 
   loadMore() {

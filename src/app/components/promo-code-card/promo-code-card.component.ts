@@ -11,6 +11,7 @@ import { PromoCodeService } from 'src/app/services/promo-code.service';
 export class PromoCodeCardComponent implements OnChanges {
   @Input() item: IPromoCode;
   isExpiry: boolean = false;
+  isModalOpen: boolean = false;
 
   constructor(private promoCodeService: PromoCodeService, private router: Router) {
   }
@@ -30,7 +31,12 @@ export class PromoCodeCardComponent implements OnChanges {
   }
 
   removePromoCode(id: string) {
-    this.promoCodeService.deletePromoCode(id)
+    this.promoCodeService.deletePromoCode(id);
+    this.isModalOpen = false;
+  }
+
+  handleopenModal() {
+    this.isModalOpen = !this.isModalOpen;
   }
 
   private checkExpiry() {

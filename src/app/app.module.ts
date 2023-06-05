@@ -20,6 +20,7 @@ import { FilterComponent } from './components/filter/filter.component';
 import { InfiniteListComponent } from './components/infinite-list/infinite-list.component';
 import { SearchComponent } from './components/search/search.component';
 import { HighlightDirective } from './directives/highlight/highlight.directive';
+import { ModalComponent } from './components/modal/modal.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { HighlightDirective } from './directives/highlight/highlight.directive';
     FilterComponent,
     InfiniteListComponent,
     SearchComponent,
-    HighlightDirective
+    HighlightDirective,
+    ModalComponent
   ],
   imports: [
     BrowserModule,

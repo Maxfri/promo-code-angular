@@ -74,4 +74,23 @@ export class PromoCodeService {
     }
   }
 
+    // getFilteredPromoCodesObservable(): Observable<IPromoCode[]> {
+  //   const filterType = this.promoCodeStore.getFilterType();
+  //   return this.promoCodeStore.getAllPromoCodesObservable().pipe(
+  //     map((promoCodes) => {
+  //       if (filterType === FilterType.All) {
+  //         return promoCodes;
+  //       } else if (filterType === FilterType.Active) {
+  //         const currentDay = moment().startOf('day');
+  //         return promoCodes.filter((promoCode) => moment(promoCode.dateOfExpiry).startOf('day') >= currentDay);
+  //       } else if (filterType === FilterType.Expired) {
+  //         const currentDay = moment().startOf('day');
+  //         return promoCodes.filter((promoCode) => moment(promoCode.dateOfExpiry).startOf('day') < currentDay);
+  //       } else {
+  //         return [];
+  //       }
+  //     })
+  //   );
+  // }
+
 }
