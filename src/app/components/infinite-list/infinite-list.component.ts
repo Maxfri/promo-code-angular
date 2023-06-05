@@ -12,6 +12,9 @@ import { PromoCodeStore } from 'src/app/store/store';
 export class InfiniteListComponent implements OnInit {
   @observable promoCodes: IPromoCode[] = [];
   isModalOpen: boolean = false;
+  isLoading: boolean = false;
+  currentPage: number = 1;
+  pageSize: number = 8;
 
   constructor(
     private promoCodeStore: PromoCodeStore,
@@ -40,7 +43,14 @@ export class InfiniteListComponent implements OnInit {
   }
 
   loadMore() {
+    if (this.isLoading) {
+      return;
+    }
 
+    this.isLoading = true;
+    this.promoCodeService.getNextBatch(this.currentPage + 1);
+    this.currentPage++;
+    this.isLoading = false;
   }
 
 }

@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { IPromoCode } from '../models/promo-code';
-import { action, makeObservable, observable } from 'mobx';
-import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { delay, map } from 'rxjs';
 import { PromoCodeStore } from '../store/store';
-import { FilterType } from '../models/filter';
-import * as moment from 'moment';
+
+const DELAY = 2000;
+const PAGE_SIZE = 8;
 
 @Injectable({
   providedIn: 'root',
@@ -17,8 +17,6 @@ export class PromoCodeService {
   constructor(private http: HttpClient, private promoCodeStore: PromoCodeStore) { }
 
   fetchPromoCodes() {
-    const filterType = this.promoCodeStore.getFilterType();
-
     try {
       this.http.get<IPromoCode[]>(`${this.url}/promo-codes.json`)
         .pipe(
@@ -27,8 +25,9 @@ export class PromoCodeService {
             for (const key in responseData) {
               promoCodes.push({ ...responseData[key], id: key });
             }
-            return promoCodes;
-          })
+            return promoCodes.slice(0, 7);
+          }),
+          delay(DELAY),
         ).subscribe((responseData) => {
           this.promoCodes = responseData;
           this.promoCodeStore.setPromoCodes(this.promoCodes);
@@ -36,6 +35,30 @@ export class PromoCodeService {
     } catch (error) {
       console.error('Error fetching promo codes:', error);
     }
+  }
+
+  getNextBatch(currentPage: number) {
+    try {
+      this.http.get<IPromoCode[]>(`${this.url}/promo-codes.json`)
+        .pipe(
+          map((responseData) => {
+            const promoCodes: IPromoCode[] = [];
+            for (const key in responseData) {
+              promoCodes.push({ ...responseData[key], id: key });
+            }
+            const length = promoCodes.length;
+            const endId = PAGE_SIZE * currentPage > length ? length - 1 : PAGE_SIZE * currentPage - 1;
+            return promoCodes.slice(0, endId);
+          }),
+          delay(DELAY),
+        ).subscribe((responseData) => {
+          this.promoCodes = responseData;
+          this.promoCodeStore.setPromoCodes(this.promoCodes);
+        });
+    } catch (error) {
+      console.error('Error fetching promo codes:', error);
+    }
+
   }
 
   fetchPromoCode(id: string) {
@@ -77,7 +100,6 @@ export class PromoCodeService {
   deletePromoCode(id: string) {
     try {
       this.http.delete(`${this.url}/promo-codes/${id}.json`).pipe((responseData) => {
-        console.log(responseData);
         return responseData;
       }).subscribe(() => {
         return;

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { PromoCodeService } from 'src/app/services/promo-code.service';
+import { PromoCodeStore } from 'src/app/store/store';
 
 @Component({
   selector: 'app-search',
@@ -8,12 +8,11 @@ import { PromoCodeService } from 'src/app/services/promo-code.service';
 })
 export class SearchComponent {
   searchValue: string = ''
-  constructor(private promoCodeService: PromoCodeService,) {
+  constructor(private promoCodeStore: PromoCodeStore,) {
 
   }
 
   search() {
-    console.log(this.searchValue);
-    
+    this.promoCodeStore.setSearchValue(this.searchValue);
   }
 }

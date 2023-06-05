@@ -54,6 +54,14 @@ export class PromoCodeStore {
 
   setSearchValue(value: string) {
     this.search = value;
+    this.promoCodes.pipe(
+      map((promoCodes) => {
+        return promoCodes.filter((promoCode) => promoCode.title.toLowerCase().includes(this.search.toLowerCase()));
+      }),
+      tap((searchedPromoCodes) => {
+        this.setPromoCodes(searchedPromoCodes);
+      })
+    ).subscribe();
   }
 
   getSearchValue(): string {
