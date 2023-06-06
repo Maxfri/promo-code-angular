@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { PromoCodeService } from 'src/app/services/promo-code.service';
 import { PromoCodeNameValidator } from 'src/app/services/name-validator.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-create-promocode',
@@ -38,7 +39,8 @@ export class CreatePromoCodeComponent implements OnInit {
     private promoCodeService: PromoCodeService,
     private promoCodeNameValidator: PromoCodeNameValidator,
     private dateAdapter: DateAdapter<Date>,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private toastr: ToastrService
   ) {
     this.dateAdapter.setLocale('ru-Ru');
   }
@@ -93,11 +95,13 @@ export class CreatePromoCodeComponent implements OnInit {
         id: this.promoCodeId,
         ...formData
       });
+      this.toastr.success('Promo Code update');
     } else {
       this.promoCodeService.createPromoCode({
         id: uuidv4(),
         ...formData
       });
+      this.toastr.success('Promo Code create');
     }
 
     this.form.reset();

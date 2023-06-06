@@ -21,6 +21,8 @@ import { InfiniteListComponent } from './components/infinite-list/infinite-list.
 import { SearchComponent } from './components/search/search.component';
 import { HighlightDirective } from './directives/highlight/highlight.directive';
 import { ModalComponent } from './components/modal/modal.component';
+import { LoaderComponent } from './components/loader/loader.component';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -35,7 +37,8 @@ import { ModalComponent } from './components/modal/modal.component';
     InfiniteListComponent,
     SearchComponent,
     HighlightDirective,
-    ModalComponent
+    ModalComponent,
+    LoaderComponent,
   ],
   imports: [
     BrowserModule,
@@ -46,7 +49,8 @@ import { ModalComponent } from './components/modal/modal.component';
     ReactiveFormsModule,
     MobxAngularModule,
     InfiniteScrollModule,
-    HttpClientModule
+    HttpClientModule,
+    ToastrModule.forRoot({})
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -26,9 +26,10 @@ export class InfiniteListComponent implements OnInit {
   ngOnInit(): void {
     this.promoCodeStore.isModalOpen.subscribe((isVisible) => this.isModalOpen = isVisible);
     this.promoCodeService.fetchPromoCodes();
-    this.promoCodeStore.promoCodes.subscribe((promoCodes: IPromoCode[]) => {
+    this.promoCodeStore.promoCodes$.subscribe((promoCodes: IPromoCode[]) => {
       this.promoCodes = promoCodes;
     });
+    this.promoCodeStore.isLoading$.subscribe((isLoading) => this.isLoading = isLoading);
   }
 
   handleCloseModal() {
@@ -46,11 +47,8 @@ export class InfiniteListComponent implements OnInit {
     if (this.isLoading) {
       return;
     }
-
-    this.isLoading = true;
     this.promoCodeService.getNextBatch(this.currentPage + 1);
     this.currentPage++;
-    this.isLoading = false;
   }
 
 }

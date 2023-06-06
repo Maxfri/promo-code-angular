@@ -3,6 +3,7 @@ import { IPromoCode } from '../models/promo-code';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { delay, map } from 'rxjs';
 import { PromoCodeStore } from '../store/store';
+import { ToastrService } from 'ngx-toastr';
 
 const DELAY = 2000;
 const PAGE_SIZE = 8;
@@ -14,7 +15,11 @@ export class PromoCodeService {
   promoCodes: IPromoCode[] = [];
   url = 'https://ng-promo-code-default-rtdb.europe-west1.firebasedatabase.app'
 
-  constructor(private http: HttpClient, private promoCodeStore: PromoCodeStore) { }
+  constructor(
+    private http: HttpClient,
+    private promoCodeStore: PromoCodeStore,
+    private toastr: ToastrService
+  ) { }
 
   fetchPromoCodes() {
     try {
@@ -22,6 +27,7 @@ export class PromoCodeService {
         .pipe(
           map((responseData) => {
             const promoCodes: IPromoCode[] = [];
+            this.promoCodeStore.isLoading$.next(true);
             for (const key in responseData) {
               promoCodes.push({ ...responseData[key], id: key });
             }
@@ -31,6 +37,7 @@ export class PromoCodeService {
         ).subscribe((responseData) => {
           this.promoCodes = responseData;
           this.promoCodeStore.setPromoCodes(this.promoCodes);
+          this.promoCodeStore.isLoading$.next(false);
         });
     } catch (error) {
       console.error('Error fetching promo codes:', error);
@@ -43,6 +50,7 @@ export class PromoCodeService {
         .pipe(
           map((responseData) => {
             const promoCodes: IPromoCode[] = [];
+            this.promoCodeStore.isLoading$.next(true);
             for (const key in responseData) {
               promoCodes.push({ ...responseData[key], id: key });
             }
@@ -54,6 +62,7 @@ export class PromoCodeService {
         ).subscribe((responseData) => {
           this.promoCodes = responseData;
           this.promoCodeStore.setPromoCodes(this.promoCodes);
+          this.promoCodeStore.isLoading$.next(false);
         });
     } catch (error) {
       console.error('Error fetching promo codes:', error);
@@ -76,7 +85,6 @@ export class PromoCodeService {
       this.http.post<IPromoCode>(`${this.url}/promo-codes.json`, promoCode)
         .subscribe((responseData) => {
           this.promoCodes.push(responseData);
-          this.promoCodeStore.setPromoCodes(this.promoCodes);
         });
     } catch (error) {
       console.error('Error creating promo code:', error);
@@ -105,6 +113,7 @@ export class PromoCodeService {
         return;
       });
       this.promoCodes = this.promoCodes.filter((promo) => promo.id !== id);
+      this.toastr.warning('Promo Code remove');
       this.promoCodeStore.setPromoCodes(this.promoCodes);
     } catch (error) {
       console.error('Error deleting promo code:', error);

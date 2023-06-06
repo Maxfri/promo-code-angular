@@ -12,3 +12,15 @@
   box-shadow: 10px 5px 5px black;
   cursor: pointer;
 }
+
+.item-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+}

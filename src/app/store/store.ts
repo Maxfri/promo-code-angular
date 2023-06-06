@@ -7,41 +7,29 @@ import * as moment from 'moment';
 
 @Injectable({ providedIn: 'root' })
 export class PromoCodeStore {
-  promoCodes: BehaviorSubject<IPromoCode[]> = new BehaviorSubject<IPromoCode[]>([]);
+  promoCodes$: BehaviorSubject<IPromoCode[]> = new BehaviorSubject<IPromoCode[]>([]);
   search: string = '';
   filterType: FilterType = FilterType.All;
   isModalOpen: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   currentId: string | null = null;
+  isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   constructor() {
     makeAutoObservable(this);
   }
 
   setPromoCodes(promoCodes: IPromoCode[]) {
-    this.promoCodes.next(promoCodes);
+    this.promoCodes$.next(promoCodes);
   }
 
   getPromoCodes(): Observable<IPromoCode[]> {
-    return this.promoCodes.asObservable();
+    return this.promoCodes$.asObservable();
   }
 
   setFilterType(filterType: FilterType) {
     this.filterType = filterType;
-
-    this.promoCodes.pipe(
-      map((promoCodes) => {
-        if (filterType === FilterType.All) {
-          return promoCodes;
-        } else if (filterType === FilterType.Active) {
-          const currentDay = moment().startOf('day');
-          return promoCodes.filter((promoCode) => moment(promoCode.dateOfExpiry).startOf('day') >= currentDay);
-        } else if (filterType === FilterType.Expired) {
-          const currentDay = moment().startOf('day');
-          return promoCodes.filter((promoCode) => moment(promoCode.dateOfExpiry).startOf('day') < currentDay);
-        } else {
-          return [];
-        }
-      }),
+    this.promoCodes$.pipe(
+      map((promoCodes) => this.filteredByFilter(promoCodes, this.filterType)),
       tap((filteredPromoCodes) => {
         this.setPromoCodes(filteredPromoCodes);
       })
@@ -54,10 +42,9 @@ export class PromoCodeStore {
 
   setSearchValue(value: string) {
     this.search = value;
-    this.promoCodes.pipe(
-      map((promoCodes) => {
-        return promoCodes.filter((promoCode) => promoCode.title.toLowerCase().includes(this.search.toLowerCase()));
-      }),
+    this.promoCodes$.pipe(
+      map((promoCodes) => this.filteredByFilter(promoCodes, this.filterType)),
+      map((promoCodes) => this.filteredBySearch(promoCodes)),
       tap((searchedPromoCodes) => {
         this.setPromoCodes(searchedPromoCodes);
       })
@@ -76,5 +63,23 @@ export class PromoCodeStore {
   handleCloseModal() {
     this.currentId = null;
     this.isModalOpen.next(false);
+  }
+
+  filteredByFilter(promoCodes: IPromoCode[], filterType: FilterType) {
+    if (filterType === FilterType.All) {
+      return promoCodes;
+    } else if (filterType === FilterType.Active) {
+      const currentDay = moment().startOf('day');
+      return promoCodes.filter((promoCode) => moment(promoCode.dateOfExpiry).startOf('day') >= currentDay);
+    } else if (filterType === FilterType.Expired) {
+      const currentDay = moment().startOf('day');
+      return promoCodes.filter((promoCode) => moment(promoCode.dateOfExpiry).startOf('day') < currentDay);
+    } else {
+      return [];
+    }
+  }
+
+  filteredBySearch(promoCodes: IPromoCode[]) {
+    return promoCodes.filter((promoCode) => promoCode.title.toLowerCase().includes(this.search.toLowerCase()));
   }
 }

@@ -1,9 +1,10 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Clipboard } from '@angular/cdk/clipboard';
 import * as moment from 'moment';
 import { Router } from '@angular/router';
 import { IPromoCode } from 'src/app/models/promo-code';
-import { PromoCodeService } from 'src/app/services/promo-code.service';
 import { PromoCodeStore } from 'src/app/store/store';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-promo-code-card',
   templateUrl: './promo-code-card.component.html',
@@ -14,9 +15,10 @@ export class PromoCodeCardComponent implements OnChanges, OnInit {
   isExpiry: boolean = false;
 
   constructor(
-    private promoCodeService: PromoCodeService,
     private promoCodeStore: PromoCodeStore,
-    private router: Router
+    private router: Router,
+    private clipboard: Clipboard,
+    private toastr: ToastrService
   ) {
 
   }
@@ -40,6 +42,11 @@ export class PromoCodeCardComponent implements OnChanges, OnInit {
 
   handleOpenModal(currentId: string) {
     this.promoCodeStore.openModal(currentId);
+  }
+
+  handleCopyPromoCode() {
+    this.clipboard.copy(this.item.promoCode);
+    this.toastr.info('Promo Code copy to clipboard');
   }
 
   private checkExpiry() {
