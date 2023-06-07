@@ -19,7 +19,7 @@
     <mat-error *ngIf="title?.errors?.['pattern']">
       Название может содержать только буквы и цифры.
     </mat-error>
-    <mat-error *ngIf="title?.errors?.['nameTaken']">
+    <mat-error *ngIf="title?.errors?.['uniqueName']">
       Данное название уже занято.
     </mat-error>
   </mat-form-field>

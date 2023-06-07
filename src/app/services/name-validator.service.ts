@@ -12,9 +12,9 @@ export class PromoCodeNameValidator {
   constructor(private promoCodeStore: PromoCodeStore) { }
 
   validateName(control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
-    return this.promoCodeStore.getPromoCodes().pipe(
+    return this.promoCodeStore.promoCodes$.pipe(
       map(promoCodes => {
-        const nameExists = promoCodes.some((item) => item.title === control.value);
+        const nameExists = promoCodes.some(item => item.title === control.value.trim());
         return nameExists ? { uniqueName: true } : null;
       })
     );

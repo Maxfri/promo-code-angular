@@ -22,7 +22,7 @@ export class CreatePromoCodeComponent implements OnInit {
       Validators.minLength(3),
       Validators.maxLength(30),
       Validators.pattern(/^[a-zA-Z0-9]+$/)
-    ], []),
+    ], [this.promoCodeNameValidator.validateName.bind(this.promoCodeNameValidator)]),
     promoCode: new FormControl<string>('', [
       Validators.required,
       Validators.minLength(1),
@@ -90,6 +90,11 @@ export class CreatePromoCodeComponent implements OnInit {
       dateOfExpiry: this.form.value.dateOfExpiry as Date,
     };
 
+    if (this.form.get('title')?.errors?.['uniqueName']) {
+      this.toastr.error('Promo Code name must be unique');
+      return;
+    }
+
     if (this.promoCodeId) {
       this.promoCodeService.updatePromoCode({
         id: this.promoCodeId,
@@ -105,5 +110,6 @@ export class CreatePromoCodeComponent implements OnInit {
     }
 
     this.form.reset();
+    this.form.updateValueAndValidity();
   }
 }
