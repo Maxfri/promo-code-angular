@@ -18,3 +18,12 @@
   justify-content: center;
   gap: 20px;
 }
+
+@media (max-width: 600px) {
+  .items-list {
+    grid-template-columns: 1fr; 
+    grid-template-rows: auto; 
+    grid-column-gap: 0; 
+    grid-row-gap: 20px;
+  }
+}

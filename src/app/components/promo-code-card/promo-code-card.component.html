@@ -1,9 +1,11 @@
 <mat-card [class.expiry]="isExpiry" highlightOnHover class="item-card">
   <mat-card-header>
     <mat-card-title-group>
-      <mat-card-title>Title: {{ item.title }}</mat-card-title>
+      <mat-card-title>
+        <h2>Title: {{ item.title }}</h2>
+      </mat-card-title>
       <mat-card-subtitle *ngIf="item.description">
-        Description: {{ item.description }}
+        <p class="item-card__subtitle">Description: {{ item.description }}</p>
       </mat-card-subtitle>
     </mat-card-title-group>
   </mat-card-header>

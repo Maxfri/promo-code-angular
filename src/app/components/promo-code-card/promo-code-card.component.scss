@@ -18,9 +18,14 @@
   flex-direction: column;
   gap: 10px;
 
+
   &__content {
     display: flex;
     flex-direction: column;
     gap: 10px;
+  }
+
+  &__subtitle {
+    word-wrap: break-word;
   }
 }
