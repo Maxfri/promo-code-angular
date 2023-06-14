@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
-import { makeAutoObservable } from 'mobx';
+import { action, makeAutoObservable, observable } from 'mobx';
 import { IPromoCode } from '../models/promo-code';
 import { FilterType } from '../models/filter';
 import { Observable, BehaviorSubject, map, tap } from 'rxjs';
 import * as moment from 'moment';
+import { PromoCodeService } from '../services/promo-code.service';
+import { IParams } from '../models/params';
 
 @Injectable({ providedIn: 'root' })
 export class PromoCodeStore {
@@ -13,18 +15,30 @@ export class PromoCodeStore {
   isModalOpen: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   currentId: string | null = null;
   isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-
-  constructor() {
+  @observable promoCodes: IPromoCode[] = [];
+  
+  constructor(
+    private promoCodeService: PromoCodeService
+  ) {
     makeAutoObservable(this);
   }
+  
+    @action setPromoCodes(promoCodes: IPromoCode[]): void {
+      this.promoCodes = promoCodes;
+    }
 
-  setPromoCodes(promoCodes: IPromoCode[]) {
-    this.promoCodes$.next(promoCodes);
-  }
-
-  getPromoCodes(): Observable<IPromoCode[]> {
-    return this.promoCodes$.asObservable();
-  }
+  // getPromoCodes(params: IParams): Observable<IPromoCode[]> {
+  //   this.promoCodeService.fetchPromoCodes(params)
+  //     .subscribe({
+  //       next: (responseData) => {
+  //         this.isLoading$.next(true);
+  //         this.setPromoCodes(responseData);
+  //       }, complete: () => {
+  //         this.isLoading$.next(false);
+  //       }
+  //     })
+  //   return this.promoCodes$.asObservable();
+  // }
 
   setFilterType(filterType: FilterType) {
     this.filterType = filterType;

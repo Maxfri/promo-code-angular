@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DateAdapter } from '@angular/material/core';
@@ -7,13 +7,14 @@ import { v4 as uuidv4 } from 'uuid';
 import { PromoCodeService } from 'src/app/services/promo-code.service';
 import { PromoCodeNameValidator } from 'src/app/services/name-validator.service';
 import { ToastrService } from 'ngx-toastr';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-create-promocode',
   templateUrl: './create-promocode.component.html',
   styleUrls: ['./create-promocode.component.scss'],
 })
-export class CreatePromoCodeComponent implements OnInit {
+export class CreatePromoCodeComponent implements OnInit, OnDestroy {
   promoCodeId: string | null;
   minDate: Date = new Date();
   form: FormGroup = new FormGroup({
@@ -35,6 +36,8 @@ export class CreatePromoCodeComponent implements OnInit {
     dateOfExpiry: new FormControl<Date>(new Date()),
   });
 
+  private destroyed$ = new Subject();
+
   constructor(
     private promoCodeService: PromoCodeService,
     private promoCodeNameValidator: PromoCodeNameValidator,
@@ -46,22 +49,13 @@ export class CreatePromoCodeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.promoCodeId = this.route.snapshot.paramMap.get('id');
-    if (this.promoCodeId) {
-      const promoCode = this.promoCodeService.fetchPromoCode(this.promoCodeId);
-      promoCode?.subscribe((promoCodeData) => {
-        if (promoCodeData) {
-          this.form.patchValue({
-            title: promoCodeData.title,
-            promoCode: promoCodeData.promoCode,
-            description: promoCodeData.description,
-            dateOfExpiry: promoCodeData.dateOfExpiry,
-          });
-        }
-      });
-    }
+    this.loadData()
   }
 
+  ngOnDestroy(): void {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
+  }
 
   get title() {
     return this.form.get("title");
@@ -95,21 +89,44 @@ export class CreatePromoCodeComponent implements OnInit {
       return;
     }
 
+
     if (this.promoCodeId) {
-      this.promoCodeService.updatePromoCode({
+      const updatePromoCode = this.promoCodeService.updatePromoCode({
         id: this.promoCodeId,
         ...formData
       });
+      updatePromoCode
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe();
       this.toastr.success('Promo Code update');
     } else {
-      this.promoCodeService.createPromoCode({
+      const createPromoCode = this.promoCodeService.createPromoCode({
         id: uuidv4(),
         ...formData
       });
+      createPromoCode.pipe().subscribe();
       this.toastr.success('Promo Code create');
     }
 
     this.form.reset();
     this.form.updateValueAndValidity();
+  }
+
+  private loadData(): void {
+    this.promoCodeId = this.route.snapshot.paramMap.get('id');
+    if (this.promoCodeId) {
+      const promoCode = this.promoCodeService.fetchPromoCode(this.promoCodeId);
+      promoCode?.pipe(takeUntil(this.destroyed$))
+        .subscribe((promoCodeData) => {
+          if (promoCodeData) {
+            this.form.patchValue({
+              title: promoCodeData.title,
+              promoCode: promoCodeData.promoCode,
+              description: promoCodeData.description,
+              dateOfExpiry: promoCodeData.dateOfExpiry,
+            });
+          }
+        });
+    }
   }
 }

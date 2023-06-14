@@ -1,4 +1,4 @@
-<form [formGroup]="form" (ngSubmit)="submit()" class="create-form-wrapper">
+<form [formGroup]="form" class="create-form-wrapper">
   <mat-form-field class="full-width">
     <mat-label>Promo-code title</mat-label>
     <input
@@ -67,7 +67,7 @@
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
 
-  <button mat-raised-button color="primary" type="submit">
+  <button mat-raised-button color="primary" type="button" (click)="submit()">
     {{ promoCodeId ? "Update" : "Create" }}
   </button>
 </form>

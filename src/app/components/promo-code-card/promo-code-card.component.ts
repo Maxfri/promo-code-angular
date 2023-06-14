@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { IPromoCode } from 'src/app/models/promo-code';
 import { PromoCodeStore } from 'src/app/store/store';
 import { ToastrService } from 'ngx-toastr';
+import { Subject } from 'rxjs';
 @Component({
   selector: 'app-promo-code-card',
   templateUrl: './promo-code-card.component.html',
@@ -14,14 +15,14 @@ export class PromoCodeCardComponent implements OnChanges, OnInit {
   @Input() item: IPromoCode;
   isExpiry: boolean = false;
 
+  private destroyed$ = new Subject();
+
   constructor(
     private promoCodeStore: PromoCodeStore,
     private router: Router,
     private clipboard: Clipboard,
     private toastr: ToastrService
-  ) {
-
-  }
+  ) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['item']) {
