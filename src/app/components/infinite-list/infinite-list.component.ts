@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Observable, Subject, takeUntil } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { observable } from 'mobx-angular';
 import { IPromoCode } from 'src/app/models/promo-code';
 import { PromoCodeService } from 'src/app/services/promo-code.service';
@@ -9,12 +10,14 @@ import { PromoCodeStore } from 'src/app/store/store';
   templateUrl: './infinite-list.component.html',
   styleUrls: ['./infinite-list.component.scss']
 })
-export class InfiniteListComponent implements OnInit {
-  @observable promoCodes: IPromoCode[] = [];
+export class InfiniteListComponent implements OnInit, OnDestroy {
+  promoCodes$: Observable<IPromoCode[]> = [];
   isModalOpen: boolean = false;
   isLoading: boolean = false;
   currentPage: number = 1;
   pageSize: number = 8;
+
+  private destroyed$ = new Subject();
 
   constructor(
     private promoCodeStore: PromoCodeStore,
@@ -27,9 +30,13 @@ export class InfiniteListComponent implements OnInit {
     this.promoCodeStore.isModalOpen.subscribe((isVisible) => this.isModalOpen = isVisible);
     this.promoCodeService.fetchPromoCodes();
     this.promoCodeStore.promoCodes$.subscribe((promoCodes: IPromoCode[]) => {
-      this.promoCodes = promoCodes;
     });
     this.promoCodeStore.isLoading$.subscribe((isLoading) => this.isLoading = isLoading);
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 
   handleCloseModal() {
@@ -49,6 +56,16 @@ export class InfiniteListComponent implements OnInit {
     }
     this.promoCodeService.getNextBatch(this.currentPage + 1);
     this.currentPage++;
+  }
+
+  private loadData(): void {
+    this.promoCodes$
+      .pipe(
+        takeUntil(this.destroyed$)
+      )
+      .subscribe(
+
+    )
   }
 
 }
