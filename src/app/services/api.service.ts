@@ -3,12 +3,13 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { IPromoCode } from '../models/promo-code';
 import { IParams } from '../models/params';
+import { environments } from 'src/environments/environments';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  apiUrl = 'https://ng-promo-code-default-rtdb.europe-west1.firebasedatabase.app'
+  
 
   constructor(private http: HttpClient) { }
 
@@ -31,24 +32,24 @@ export class ApiService {
       queryParams = queryParams.set('status', params.status);
     }
 
-    return this.http.get<IPromoCode[]>(`${this.apiUrl}/promo-codes.json`, {
+    return this.http.get<IPromoCode[]>(`${environments.apiUrl}/promo-codes.json`, {
       params: queryParams 
     });
   }
 
   fetchPromoCode(id: string): Observable<IPromoCode> {
-    return this.http.get<IPromoCode>(`${this.apiUrl}/promo-codes/${id}.json`);
+    return this.http.get<IPromoCode>(`${environments.apiUrl}/promo-codes/${id}.json`);
   }
 
   createPromoCode(promoCode: IPromoCode): Observable<IPromoCode> {
-    return this.http.post<IPromoCode>(`${this.apiUrl}/promo-codes.json`, promoCode);
+    return this.http.post<IPromoCode>(`${environments.apiUrl}/promo-codes.json`, promoCode);
   }
 
   updatePromoCode(promoCode: IPromoCode): Observable<IPromoCode> {
-    return this.http.put<IPromoCode>(`${this.apiUrl}/promo-codes/${promoCode.id}.json`, promoCode)
+    return this.http.put<IPromoCode>(`${environments.apiUrl}/promo-codes/${promoCode.id}.json`, promoCode)
   }
 
   deletePromoCode(id: string) {
-    return this.http.delete(`${this.apiUrl}/promo-codes/${id}.json`);
+    return this.http.delete(`${environments.apiUrl}/promo-codes/${id}.json`);
   }
 }
