@@ -1,4 +1,4 @@
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, map, takeUntil } from 'rxjs';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IPromoCode } from 'src/app/models/promo-code';
 import { PromoCodeService } from 'src/app/services/promo-code.service';
@@ -11,16 +11,14 @@ import { IParams } from "../../models/params";
   styleUrls: ['./infinite-list.component.scss']
 })
 export class InfiniteListComponent implements OnInit, OnDestroy {
-  promoCodes$: Observable<IPromoCode[]>;
   isModalOpen: boolean = false;
   isLoading: boolean = false;
   currentPage: number = 1;
-  pageSize: number = 8;
 
   private destroyed$ = new Subject();
 
   constructor(
-    private promoCodeStore: PromoCodeStore,
+    public promoCodeStore: PromoCodeStore,
     private promoCodeService: PromoCodeService,
   ) { }
 
@@ -55,24 +53,25 @@ export class InfiniteListComponent implements OnInit, OnDestroy {
     if (this.isLoading) {
       return;
     }
-    this.currentPage++;
+    this.promoCodeStore.setCurrentPage(this.currentPage++);
     this.loadData();
   }
 
   private loadData(): void {
     const params: IParams = {
       page: this.currentPage,
-      pageSize: this.pageSize,
       status: this.promoCodeStore.filterType,
       search: this.promoCodeStore.search
     };
 
-    this.promoCodes$ = this.promoCodeService.fetchPromoCodes(params);
+
     this.promoCodeStore.isLoading$.next(true);
 
-    this.promoCodes$
+    this.promoCodeService.fetchPromoCodes(params)
       .pipe(
-        takeUntil(this.destroyed$)
+        takeUntil(this.destroyed$),
+        map((promoCodes) => this.promoCodeStore.filteredByFilter(promoCodes, this.promoCodeStore.filterType)),
+        map((promoCodes) => this.promoCodeStore.filteredBySearch(promoCodes)),
       )
       .subscribe((promoCodes) => {
         this.promoCodeStore.setPromoCodes(promoCodes);

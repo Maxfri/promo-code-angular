@@ -1,53 +1,35 @@
 import { Injectable } from '@angular/core';
-import { action, makeAutoObservable, observable } from 'mobx';
+import { action, makeAutoObservable } from 'mobx';
 import { IPromoCode } from '../models/promo-code';
 import { FilterType } from '../models/filter';
-import { Observable, BehaviorSubject, map, tap } from 'rxjs';
+import { BehaviorSubject, map, tap } from 'rxjs';
 import * as moment from 'moment';
 import { PromoCodeService } from '../services/promo-code.service';
-import { IParams } from '../models/params';
 
 @Injectable({ providedIn: 'root' })
 export class PromoCodeStore {
   promoCodes$: BehaviorSubject<IPromoCode[]> = new BehaviorSubject<IPromoCode[]>([]);
   search: string = '';
+  currentPage: number = 1;
   filterType: FilterType = FilterType.All;
   isModalOpen: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   currentId: string | null = null;
   isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  @observable promoCodes: IPromoCode[] = [];
-  
-  constructor(
-    private promoCodeService: PromoCodeService
-  ) {
+
+  constructor() {
     makeAutoObservable(this);
   }
-  
-    @action setPromoCodes(promoCodes: IPromoCode[]): void {
-      this.promoCodes = promoCodes;
-    }
 
-  // getPromoCodes(params: IParams): Observable<IPromoCode[]> {
-  //   this.promoCodeService.fetchPromoCodes(params)
-  //     .subscribe({
-  //       next: (responseData) => {
-  //         this.isLoading$.next(true);
-  //         this.setPromoCodes(responseData);
-  //       }, complete: () => {
-  //         this.isLoading$.next(false);
-  //       }
-  //     })
-  //   return this.promoCodes$.asObservable();
-  // }
+  @action setPromoCodes(promoCodes: IPromoCode[]): void {
+    this.promoCodes$.next(promoCodes);
+  }
+
+  setCurrentPage(pageNumber: number) {
+    this.currentPage = pageNumber;
+  }
 
   setFilterType(filterType: FilterType) {
     this.filterType = filterType;
-    this.promoCodes$.pipe(
-      map((promoCodes) => this.filteredByFilter(promoCodes, this.filterType)),
-      tap((filteredPromoCodes) => {
-        this.setPromoCodes(filteredPromoCodes);
-      })
-    ).subscribe();
   }
 
   getFilterType(): FilterType {
@@ -56,13 +38,6 @@ export class PromoCodeStore {
 
   setSearchValue(value: string) {
     this.search = value;
-    this.promoCodes$.pipe(
-      map((promoCodes) => this.filteredByFilter(promoCodes, this.filterType)),
-      map((promoCodes) => this.filteredBySearch(promoCodes)),
-      tap((searchedPromoCodes) => {
-        this.setPromoCodes(searchedPromoCodes);
-      })
-    ).subscribe();
   }
 
   getSearchValue(): string {

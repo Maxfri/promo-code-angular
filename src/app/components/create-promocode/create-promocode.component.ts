@@ -116,16 +116,15 @@ export class CreatePromoCodeComponent implements OnInit, OnDestroy {
     this.promoCodeId = this.route.snapshot.paramMap.get('id');
     if (this.promoCodeId) {
       const promoCode = this.promoCodeService.fetchPromoCode(this.promoCodeId);
-      promoCode?.pipe(takeUntil(this.destroyed$))
-        .subscribe((promoCodeData) => {
-          if (promoCodeData) {
-            this.form.patchValue({
-              title: promoCodeData.title,
-              promoCode: promoCodeData.promoCode,
-              description: promoCodeData.description,
-              dateOfExpiry: promoCodeData.dateOfExpiry,
-            });
-          }
+      promoCode
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe(({ title, promoCode, description, dateOfExpiry }) => {
+          this.form.patchValue({
+            title,
+            promoCode,
+            description,
+            dateOfExpiry,
+          });
         });
     }
   }

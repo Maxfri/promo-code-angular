@@ -27,6 +27,10 @@ export class ApiService {
       queryParams = queryParams.set('search', params.search);
     }
 
+    if (params.status) {
+      queryParams = queryParams.set('status', params.status);
+    }
+
     return this.http.get<IPromoCode[]>(`${this.apiUrl}/promo-codes.json`, {
       params: queryParams 
     });

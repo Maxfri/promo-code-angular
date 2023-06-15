@@ -21,45 +21,23 @@ export class PromoCodeService {
     private api: ApiService
   ) { }
 
-  fetchPromoCodes(params: IParams): Observable<IPromoCode[]> {
-    return this.api.fetchPromoCodes(params)
+  fetchPromoCodes({ page = 1, pageSize = 8, search, status }: IParams): Observable<IPromoCode[]> {
+    return this.api.fetchPromoCodes({ page, pageSize, search, status })
       .pipe(
         map((responseData) => {
           const promoCodes: IPromoCode[] = [];
+
           for (const key in responseData) {
             promoCodes.push({ ...responseData[key], id: key });
           }
-          return promoCodes.slice(0, 7);
+          const length = promoCodes.length;
+          const endId = PAGE_SIZE * page > length ? length - 1 : PAGE_SIZE * page - 1;
+          return promoCodes.slice(0, endId);
         }),
         delay(DELAY),
       );
-    // .subscribe((responseData) => {
-    //   this.promoCodeStore.setPromoCodes(responseData);
-    //   this.promoCodeStore.isLoading$.next(false);
-    // });
   }
 
-  // getNextBatch(currentPage: number): Observable<IPromoCode[]> {
-  //   return this.api.fetchPromoCodes({
-
-  //   }).pipe(
-  //     map((responseData) => {
-  //       const promoCodes: IPromoCode[] = [];
-  //       for (const key in responseData) {
-  //         promoCodes.push({ ...responseData[key], id: key });
-  //       }
-  //       const length = promoCodes.length;
-  //       const endId = PAGE_SIZE * currentPage > length ? length - 1 : PAGE_SIZE * currentPage - 1;
-  //       return promoCodes.slice(0, endId);
-  //     }),
-  //     delay(DELAY),
-  //   )
-  //   // .subscribe((responseData) => {
-  //   //   this.promoCodes = responseData;
-  //   //   this.promoCodeStore.setPromoCodes(this.promoCodes);
-  //   //   this.promoCodeStore.isLoading$.next(false);
-  //   // });
-  // }
 
   fetchPromoCode(id: string): Observable<IPromoCode> {
     return this.api.fetchPromoCode(id)
@@ -73,10 +51,6 @@ export class PromoCodeService {
       .pipe(
         delay(DELAY),
       );
-    // this.http.post<IPromoCode>(`${this.url}/promo-codes.json`, promoCode)
-    //   .subscribe((responseData) => {
-    //     this.promoCodes.push(responseData);
-    //   });
   }
 
   updatePromoCode(promoCode: IPromoCode): Observable<IPromoCode> {
@@ -84,10 +58,6 @@ export class PromoCodeService {
       .pipe(
         delay(DELAY),
       );
-    // const index = this.promoCodes.findIndex((promo) => promo.id === promoCode.id);
-    // if (index !== -1) {
-    //   this.promoCodes[index] = promoCode;
-    // }
   }
 
   deletePromoCode(id: string) {
