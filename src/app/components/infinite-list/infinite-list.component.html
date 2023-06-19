@@ -1,0 +1,29 @@
+<section class="section">
+  <div
+    class="items-list"
+    infiniteScroll
+    [infiniteScrollDistance]="2"
+    [infiniteScrollThrottle]="50"
+    (scrolled)="loadMore()"
+  >
+    <app-promo-code-card
+      *ngFor="let promoCode of this.promoCodeStore.promoCodes$ | async"
+      [item]="promoCode"
+    >
+    </app-promo-code-card>
+    <div *ngIf="!this.promoCodeStore.promoCodes$">Promocodes didn't found</div>
+  </div>
+  <app-modal *ngIf="isModalOpen">
+    <h2>Are you sure you want to remove this promo code?</h2>
+    <div class="btns-wrapper">
+      <button mat-flat-button color="primary" (click)="handleCloseModal()">
+        No
+      </button>
+      <button mat-flat-button color="warn" (click)="removePromoCode()">
+        <mat-icon>delete</mat-icon>
+        Yes
+      </button>
+    </div>
+  </app-modal>
+  <app-loader *ngIf="isLoading"></app-loader>
+</section>

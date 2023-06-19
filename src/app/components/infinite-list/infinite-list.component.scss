@@ -1,0 +1,29 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.items-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  grid-column-gap: 40px;
+  grid-row-gap: 40px;
+}
+
+.btns-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+@media (max-width: 600px) {
+  .items-list {
+    grid-template-columns: 1fr; 
+    grid-template-rows: auto; 
+    grid-column-gap: 0; 
+    grid-row-gap: 20px;
+  }
+}
